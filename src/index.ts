@@ -111,6 +111,8 @@ connector.model(async ({ define, cache }, configOptions) => {
 
 		const model = agilityModels[modelID]
 
+		console.log("*** AGILITY *** Adding Model: ", model)
+
 		//build the fields first
 		let fields: any = {}
 		model.fields.forEach((field: any) => {
@@ -118,18 +120,20 @@ connector.model(async ({ define, cache }, configOptions) => {
 			fields[fieldName] = {
 				//TODO: handle linked content field :)
 				//String, Int, Float, Boolean, JSON, and Date
-				type: field.dataType === "Date" ? "Date"
-					: field.dataType === "Integer" ? "Int"
-						: field.dataType === "Decimal" ? "Float"
-							: field.dataType === "Boolean" ? "Boolean"
-								: field.dataType === "FileAttachment" ? FileAttachment
-									: field.dataType === "ImageAttachment" ? ImageAttachment
-										//TODO	: field.dataType === "Link" ? Link
-										//TODO	: field.dataType === "Content" ? ContentType...
+				type: field.type === "Date" ? "Date"
+					: field.type === "Integer" ? "Int"
+						: field.type === "Decimal" ? "Float"
+							: field.type === "Boolean" ? "Boolean"
+								: field.type === "FileAttachment" ? FileAttachment
+									: field.type === "ImageAttachment" ? ImageAttachment
+										//TODO	: field.type === "Link" ? Link
+										//TODO	: field.type === "Content" ? ContentType...
 										: "String",
 				required: field.settings.Required === "True"
 			}
 		});
+
+		console.log("Fields are", fields)
 
 		define.nodeModel({
 			name: model.referenceName,
@@ -187,6 +191,8 @@ connector.event("createAllNodes", async ({ models },) => {
 
 	console.log("*** AGILITY integration.createAllNodes")
 
+
+
 	models["Post"].create({
 		id: "124",
 		title: "Virtual Tours - Ways to Travel From Home",
@@ -198,8 +204,6 @@ connector.event("createAllNodes", async ({ models },) => {
 			"url": "https://cdn-dev.aglty.io/hqokwsfv/posts/virtual-tour_20210331171226_0.jpg",
 			"target": null,
 			"filesize": 279207,
-			"pixelHeight": "1542",
-			"pixelWidth": "2048",
 			"height": 1542,
 			"width": 2048
 		},

@@ -1,0 +1,19 @@
+{
+  "name": "agility-content",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "ntli build -a",
+    "dev": "ntli dev -c",
+    "preview": "ntli preview",
+    "clean": "rm -rf .cache",
+    "help": "ntli -h"
+  },
+  "dependencies": {
+    "@agility/content-fetch": "^1.1.5",
+    "@agility/content-sync": "^1.1.5",
+    "@netlify/sdk": "^1.0.5",
+    "typescript": "^5.2.2"
+  }
+}

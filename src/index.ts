@@ -186,6 +186,7 @@ connector.model(async ({ define, cache }, configOptions) => {
 
 /**
  * Create the nodes for the first time...
+ * Docs here: https://sdk.netlify.com/connectors/develop/
  */
 connector.event("createAllNodes", async ({ models },) => {
 
@@ -240,7 +241,8 @@ connector.event("createAllNodes", async ({ models },) => {
 });
 
 /**
- * Content Delta!
+ * Content Delta! Do a sync pull down the delta and update the nodes
+ * Docs here: https://sdk.netlify.com/connectors/develop/
  */
 connector.event("updateNodes", async ({ models, cache }) => {
 

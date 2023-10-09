@@ -16,9 +16,12 @@ interface IAgilityClients {
 
 export const getAgilityClients = ({ configOptions }: IAgilitySyncConfig): IAgilityClients => {
 
+	const baseUrl = null //"https://localhost:5001"
+
 	const fetchApiClient = agilityAPI.getApi({
 		guid: configOptions.guid,
-		apiKey: configOptions.fetchAPIToken
+		apiKey: configOptions.fetchAPIToken,
+		baseUrl
 	});
 
 	//const models = await getModels({ apiClient: fetchApiClient })
@@ -26,7 +29,8 @@ export const getAgilityClients = ({ configOptions }: IAgilitySyncConfig): IAgili
 	const previewApiClient = agilityAPI.getApi({
 		guid: configOptions.guid,
 		apiKey: configOptions.previewAPIToken,
-		isPreview: true
+		isPreview: true,
+		baseUrl
 	});
 
 	const fetchSyncClient = agilitySync.getSyncClient({

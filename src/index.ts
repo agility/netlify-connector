@@ -4,6 +4,12 @@ import { syncAgilityContent } from "./sync/agility-sync";
 import { getAgilityClients } from "./sync/agility-clients";
 import { getModels } from "./sync/agility-get-models";
 import { camelize } from "./util/camelize";
+import { MODELS_CACHE_KEY } from "./constants";
+import { outputMessage } from "./util/log";
+import { defineFileAttachment } from "./definitions/file-attachment";
+import { defineImageAttachment } from "./definitions/image-attachment";
+import { defineLinkField } from "./definitions/link-type";
+import { defineAgilityProperties } from "./definitions/agility-properties";
 
 const integration = new NetlifyIntegration();
 const connector = integration.addConnector({
@@ -56,93 +62,75 @@ connector.defineOptions(({ zod }) => {
  */
 connector.model(async ({ define, cache }, configOptions) => {
 
+	outputMessage("Adding Models...")
 
-	const FileAttachment = define.object({
-		name: "FileAttachment",
-		fields: {
-			label: {
-				type: "String",
-			},
-			url: {
-				type: "String",
-			},
-			target: {
-				type: "String",
-			},
-			filesize: {
-				type: "Int",
-			}
-		},
-	});
-
-	const ImageAttachment = define.object({
-		name: "ImageAttachment",
-		fields: {
-			label: {
-				type: "String",
-			},
-			url: {
-				type: "String",
-			},
-			target: {
-				type: "String",
-			},
-			filesize: {
-				type: "Int",
-			},
-			height: {
-				type: "Int",
-			},
-			width: {
-				type: "Int",
-			},
-		},
-	});
-
-	console.log("*** AGILITY Adding Models...")
+	const AgilityFileAttachment = defineFileAttachment(define)
+	const AgilityImageAttachment = defineImageAttachment(define)
+	const AgiltyLinkField = defineLinkField(define)
+	const AgilityProperties = defineAgilityProperties(define)
 
 	const { fetchApiClient } = getAgilityClients({ configOptions })
 
-	//get the models from Agility
-	const agilityModels = await getModels({ apiClient: fetchApiClient })
+	//get the models from Agility (or cache)
+	const agilityModels = await getModels({ apiClient: fetchApiClient, cache })
 
 	Object.keys(agilityModels).forEach(modelID => {
 		//create the models from Agility
 
 		const model = agilityModels[modelID]
 
-		console.log("*** AGILITY *** Adding Model: ", model)
+		outputMessage("Adding Model: ", model.referenceName)
 
 		//build the fields first
-		let fields: any = {}
+		let fields: any = {
+			//every type has an Agility properties type and a special cache field based on the version ID and the typename
+			agilityVersionId: {
+				type: "String",
+				required: true
+			},
+			agilityProperties: {
+				type: AgilityProperties,
+				required: true
+			}
+		}
+
 		model.fields.forEach((field: any) => {
+
 			const fieldName = camelize(field.name)
+
+			const modelID = parseInt(field.settings.ContentDefinition || "0")
+			const renderAs = field.settings.RenderAs || null
+			let linkedModelName = null
+			if (!isNaN(modelID) && modelID > 0) {
+				//this is a linked content field
+				const linkedModel = agilityModels[modelID]
+				linkedModelName = linkedModel.referenceName
+			}
+
 			fields[fieldName] = {
-				//TODO: handle linked content field :)
-				//String, Int, Float, Boolean, JSON, and Date
 				type: field.type === "Date" ? "Date"
 					: field.type === "Integer" ? "Int"
 						: field.type === "Decimal" ? "Float"
 							: field.type === "Boolean" ? "Boolean"
-								: field.type === "FileAttachment" ? FileAttachment
-									: field.type === "ImageAttachment" ? ImageAttachment
-										//TODO	: field.type === "Link" ? Link
-										//TODO	: field.type === "Content" ? ContentType...
-										: "String",
-				required: field.settings.Required === "True"
+								: field.type === "FileAttachment" ? AgilityFileAttachment
+									: field.type === "ImageAttachment" ? AgilityImageAttachment
+										: field.type === "Link" ? AgiltyLinkField
+											: field.type === "Content" && linkedModelName ? linkedModelName
+												: "String",
+				required: field.settings.Required === "True",
+				list: field.type !== "Link" ? false : renderAs === "dropdown" ? false : true,
 			}
 		});
 
-		console.log("Fields are", fields)
-
 		define.nodeModel({
 			name: model.referenceName,
+			cacheFieldName: "agilityVersionId",
 			fields
 		});
 
 	})
 
-	console.log("*** AGILITY *** Models Added...")
+	outputMessage("Models added...")
 
 	// define.nodeModel({
 	// 	name: "User",

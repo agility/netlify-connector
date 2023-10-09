@@ -1,0 +1,1 @@
+export const MODELS_CACHE_KEY = "agility-models"

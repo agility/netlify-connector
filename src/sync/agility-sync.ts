@@ -14,7 +14,6 @@ export const syncAgilityContent = async ({ configOptions }: IAgilitySyncConfig) 
 		apiKey: configOptions.fetchAPIToken
 	});
 
-	const models = await getModels({ apiClient: fetchApiClient })
 
 	const previewApiClient = agilityAPI.getApi({
 		guid: configOptions.guid,
@@ -23,7 +22,6 @@ export const syncAgilityContent = async ({ configOptions }: IAgilitySyncConfig) 
 	});
 
 	console.log("fetchApiClient", fetchApiClient)
-	console.log("models", models)
 
 	// const syncClient = agilitySync.getSyncClient({
 	// 	guid: configOptions.guid,

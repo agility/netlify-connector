@@ -5,6 +5,7 @@ import { defineAgilityLayout } from "./definitions/agility-layout";
 import { defineAgilityModels } from "./definitions/agility-models";
 import { defineAgilitySitemaps } from "./definitions/agility-sitemaps";
 import { syncAgilityContent } from "./sync/agility-sync";
+import { defineAgilityRedirection } from "./definitions/agility-redirection";
 
 const integration = new NetlifyIntegration();
 const connector = integration.addConnector({
@@ -60,9 +61,11 @@ connector.model(async ({ define, cache }, configOptions) => {
 	//get the agility clients...
 	const { fetchApiClient } = getAgilityAPIClients({ configOptions })
 
-	//build the layouts (pages) models
+	//build the models for layouts (pages, sitemaps, redirects, etc)
 	defineAgilityLayout(define)
 	defineAgilitySitemaps(define)
+	defineAgilityRedirection(define)
+
 
 	outputMessage("Adding Content Models...")
 
@@ -81,51 +84,6 @@ connector.event("createAllNodes", async ({ models, cache }, configOptions) => {
 
 	await syncAgilityContent({ configOptions, models, cache })
 
-	/*
-		models["Post"].create({
-			id: "124",
-			title: "Virtual Tours - Ways to Travel From Home",
-			slug: "virtual-tours-ways-to-travel-from-home",
-			"date": "2021-03-31T13:17:50+00:00",
-			"category": "110",
-			"image": {
-				"label": "Virtual Tour",
-				"url": "https://cdn-dev.aglty.io/hqokwsfv/posts/virtual-tour_20210331171226_0.jpg",
-				"target": null,
-				"filesize": 279207,
-				"height": 1542,
-				"width": 2048
-			},
-			"content": "<p>Virtual tours can open up ama</p>",
-			"categoryId": "110"
-
-		});
-
-	*/
-
-	/*
-
-	models.User.create({
-		id: "1",
-		name: "Annie",
-		posts: [
-			{
-				id: "1",
-				__typename: "Post",
-			},
-		],
-	});
-	models.Post.create({
-		id: "1",
-		title: "Hello World",
-		blocks: [
-			{
-				title: "Example block title",
-				content: "You can create complex content models",
-			},
-		],
-	});
-	*/
 });
 
 /**
@@ -137,35 +95,11 @@ connector.event("updateNodes", async ({ models, cache }, configOptions) => {
 	await syncAgilityContent({ configOptions, models, cache })
 
 
-	/*
-	models.User.create({
-		id: "1", // overwrites the existing User node with this ID
-		name: "Annie",
-		posts: [
-			{
-				id: "1",
-				__typename: "Post",
-			},
-		],
-	});
-	models.Post.create({
-		id: "2", // creates a new Post since this ID doesn't exist yet
-		title: "Writing lots of posts these days",
-		blocks: [
-			{
-				title: "Page section",
-				content: "what up",
-			},
-		],
-	});
-	*/
 });
 
 integration.onEnable(async (_, { teamId, siteId, client }) => {
 	// Connectors are disabled by default, so we need to
 	// enable them when the integration is enabled.
-
-	console.log("*** AGILITY integration.onEnable")
 
 	teamId && await client.enableConnectors(teamId);
 

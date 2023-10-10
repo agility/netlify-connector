@@ -1,4 +1,5 @@
 import { camelize } from "../util/camelize"
+import { MODELS_CACHE_KEY } from "../constants"
 
 const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 
@@ -6,12 +7,13 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 	const preview = options.preview
 	const models = options.models
 
-	const itemKey = `${itemType}-${itemID}-${preview ? "preview" : "fetch"}`
+
 	const id = getNodeID({ options, itemType, languageCode, itemID });
 
 	switch (itemType) {
 		case "state":
 			//state is special we store it in the cache...
+			const itemKey = `${itemType} - ${itemID} - ${preview ? "preview" : "fetch"}`
 			await cache.set(itemKey, item);
 			return
 		case "item": {
@@ -25,11 +27,9 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 				definitionName: item.properties.definitionName,
 				itemOrder: item.properties.itemOrder
 			}
-			console.log("***** save sync item", item.properties)
-			const model = models[item.properties.definitionName]
+			const modelReferenceName = item.properties.definitionName
+			const model = models[modelReferenceName]
 			if (!model) {
-
-				console.log("no model found for content definition", item.properties.definitionName)
 
 				//if we don't have a specific model for this content definition, then it's a "component"
 				models["Component"].create({
@@ -40,13 +40,46 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 					content: item.fields
 				})
 			} else {
-				console.log("***** save sync item", item)
+
+				//TODO: handle linked content fields...
+				let agilityModels = await cache.get(MODELS_CACHE_KEY)
+
+				if (!agilityModels || !agilityModels.data) {
+					outputError("Unable to find models in cache for content items...")
+					return
+				}
+
+				//get the model for this item...
+				const agilityModel = Object.keys(agilityModels.data).map(key => agilityModels.data[key]).find(m => m.referenceName === modelReferenceName)
+
+				if (!agilityModel) {
+					outputError(`Unable to find the Agility models in cache for ${modelReferenceName}...`)
+					return
+				}
 
 				const fields = {}
-				for (const key in item.fields) {
-					const fieldName = camelize(key)
-					fields[fieldName] = item.fields[key]
-				}
+				agilityModel.fields.forEach(field => {
+
+					const fieldName = camelize(field.name)
+					const propertyName = Object.keys(item.fields).find(key => key.toLowerCase() === fieldName.toLowerCase())
+					let fieldValue = item.fields[propertyName]
+
+					if (field.type === "Content") {
+
+						if (fieldValue.contentid) {
+							//a single linked content item value
+							const linkedContentID = getNodeID({ options, itemType: "item", languageCode, itemID: fieldValue.contentid })
+							fieldValue = linkedContentID
+						} else {
+
+							console.log(modelReferenceName, "content field", fieldName, fieldValue)
+						}
+					}
+
+					if (fieldValue !== undefined) {
+						fields[fieldName] = fieldValue
+					}
+				})
 
 				model.create({
 					id,
@@ -82,7 +115,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 
 			models["Layout"].create({
 				id,
-				layoutId: item.pageID,
+				pageId: item.pageID,
 				versionId: item.properties.versionId.toString(),
 				properties: {
 					preview,
@@ -110,77 +143,25 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 
 			})
 			return
+		case "urlredirections": {
+
+			//add the full object to the cache so we can track the lastAccessDate
+			await cache.set(itemType, item);
+
+			//add the redirection items to graphql
+			models["Redirections"].create({
+				id,
+				items: item.items
+			})
+			return
+		}
 	}
 
 
 
 	console.log("***** save sync item id", id, "type:", itemType)
-	//console.log("***** save sync item", item)
+	console.log("***** save sync item", item)
 
-
-
-
-	/*
-
-	let nodeObj = {
-		languageCode: languageCode,
-		itemID: itemID
-	}
-
-	//rename 'fields' to 'customFields', because 'fields' is a reserved name
-	if (item.fields) {
-		item.customFields = item.fields;
-		delete item.fields;
-	}
-
-	switch (itemType) {
-		case "item": {
-			nodeObj.itemJson = "";
-			break;
-		}
-		case "page": {
-			nodeObj.pageJson = "";
-			break;
-		}
-		case "state": {
-			break;
-		}
-		case "sitemap": {
-			break;
-		}
-		case "urlredirections":{
-			break;
-		}
-		case "nestedsitemap": {
-			//we can't store an array...
-			item = { nodes: item };
-			break;
-		}
-		default: {
-			//a content 'list'...
-			item.languageCode = languageCode;
-			item.itemID = itemID;
-			nodeObj = item;
-		}
-
-	}
-
-	const jsonContent = JSON.stringify(item);
-	const nodeMeta = {
-		id: nodeID,
-		parent: null,
-		children: [],
-		internal: {
-			type: typeName,
-			content: jsonContent,
-			contentDigest: options.createContentDigest(item)
-		}
-	}
-
-	const nodeToCreate = Object.assign({}, nodeObj, nodeMeta);
-
-	await options.createNode(nodeToCreate);
-	*/
 }
 
 
@@ -216,13 +197,21 @@ const getItem = async ({ options, itemType, languageCode, itemID }) => {
 	const cache = options.cache
 	const preview = options.preview
 
-	const itemKey = `${itemType}-${itemID}-${preview ? "preview" : "fetch"}`
+
 
 	if (itemType === "state") {
+		//get the state from cache...
+		const itemKey = `${itemType} - ${itemID} - ${preview ? "preview" : "fetch"}`
 		const retItem = await cache.get(itemKey);
-		console.log("***** get sync state", itemKey, retItem)
+
 		return retItem;
+	} else if (itemType === "urlredirections") {
+		//get the last mod date for the url redirections
+		const retItem = await cache.get(itemType);
+		return retItem
 	}
+
+	console.log("getItem", itemType, itemKey, languageCode)
 
 	/*
 	const nodeID = getNodeID({ options, itemType, languageCode, itemID });

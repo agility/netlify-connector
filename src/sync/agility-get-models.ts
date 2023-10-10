@@ -36,12 +36,12 @@ export const getModels = async ({ apiClient, cache }: Props) => {
 /**
  * Gets the models from Agility
  * @param apiClient
+ * @param lastModified the last mod date that we got from the previous request
  */
 export const getModelsFromAgility = async (apiClient: any, lastModified: string) => {
 
 	const url = `${apiClient.config.baseUrl}/${apiClient.config.isPreview ? "preview" : "fetch"}/contentmodels?lastModifiedDate=${encodeURIComponent(lastModified)}	`
 
-	console.log("*** models url", url)
 	try {
 
 		const agent = new https.Agent({

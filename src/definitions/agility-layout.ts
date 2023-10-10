@@ -100,7 +100,7 @@ export const defineAgilityLayout = (define: any) => {
 		name: "Layout",
 		cacheFieldName: "versionId",
 		fields: {
-			layoutId: {
+			pageId: {
 				type: "Int",
 				required: true
 			},

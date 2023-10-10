@@ -1,10 +1,11 @@
 import agilitySync from "@agility/content-sync"
-let syncInterfaceGatsby = require("./agility-sync-interface.cjs");
+let syncInterfaceNetlify = require("./agility-sync-interface.cjs");
 import agilityAPI from '@agility/content-fetch'
-import { getModels } from "./agility-get-models";
 
 interface IAgilitySyncConfig {
 	configOptions: Record<string, any>
+	models?: Record<string, any>
+
 }
 
 interface IAgilityClients {
@@ -14,7 +15,7 @@ interface IAgilityClients {
 	previewSyncClient: any
 }
 
-export const getAgilityClients = ({ configOptions }: IAgilitySyncConfig): IAgilityClients => {
+export const getAgilityAPIClients = ({ configOptions, models }: IAgilitySyncConfig): IAgilityClients => {
 
 	const baseUrl = null //"https://localhost:5001"
 
@@ -42,8 +43,9 @@ export const getAgilityClients = ({ configOptions }: IAgilitySyncConfig): IAgili
 		languages: configOptions.locales.split(","),
 		store: {
 			//use gatsby sync interface
-			interface: syncInterfaceGatsby,
+			interface: syncInterfaceNetlify,
 			options: {
+				models
 				// getNode,
 				// createNodeId,
 				// createNode,
@@ -62,8 +64,9 @@ export const getAgilityClients = ({ configOptions }: IAgilitySyncConfig): IAgili
 		languages: configOptions.locales.split(","),
 		store: {
 			//use gatsby sync interface
-			interface: syncInterfaceGatsby,
+			interface: syncInterfaceNetlify,
 			options: {
+				models
 				// getNode,
 				// createNodeId,
 				// createNode,

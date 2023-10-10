@@ -1,15 +1,10 @@
-// Documentation: https://sdk.netlify.com
 import { NetlifyIntegration } from "@netlify/sdk";
-import { syncAgilityContent } from "./sync/agility-sync";
-import { getAgilityClients } from "./sync/agility-clients";
-import { getModels } from "./sync/agility-get-models";
-import { camelize } from "./util/camelize";
-import { MODELS_CACHE_KEY } from "./constants";
+import { getAgilityAPIClients } from "./sync/agility-api-clients";
 import { outputMessage } from "./util/log";
-import { defineFileAttachment } from "./definitions/file-attachment";
-import { defineImageAttachment } from "./definitions/image-attachment";
-import { defineLinkField } from "./definitions/link-type";
-import { defineAgilityProperties } from "./definitions/agility-properties";
+import { defineAgilityLayout } from "./definitions/agility-layout";
+import { defineAgilityModels } from "./definitions/agility-models";
+import { defineAgilitySitemaps } from "./definitions/agility-sitemaps";
+import { syncAgilityContent } from "./sync/agility-sync";
 
 const integration = new NetlifyIntegration();
 const connector = integration.addConnector({
@@ -62,146 +57,51 @@ connector.defineOptions(({ zod }) => {
  */
 connector.model(async ({ define, cache }, configOptions) => {
 
-	outputMessage("Adding Models...")
+	//get the agility clients...
+	const { fetchApiClient } = getAgilityAPIClients({ configOptions })
 
-	const AgilityFileAttachment = defineFileAttachment(define)
-	const AgilityImageAttachment = defineImageAttachment(define)
-	const AgiltyLinkField = defineLinkField(define)
-	const AgilityProperties = defineAgilityProperties(define)
+	//build the layouts (pages) models
+	defineAgilityLayout(define)
+	defineAgilitySitemaps(define)
 
-	const { fetchApiClient } = getAgilityClients({ configOptions })
+	outputMessage("Adding Content Models...")
 
-	//get the models from Agility (or cache)
-	const agilityModels = await getModels({ apiClient: fetchApiClient, cache })
+	//build the content models
+	await defineAgilityModels({ define, cache, fetchApiClient })
 
-	Object.keys(agilityModels).forEach(modelID => {
-		//create the models from Agility
+	outputMessage("Content Models added...")
 
-		const model = agilityModels[modelID]
-
-		outputMessage("Adding Model: ", model.referenceName)
-
-		//build the fields first
-		let fields: any = {
-			//every type has an Agility properties type and a special cache field based on the version ID and the typename
-			agilityVersionId: {
-				type: "String",
-				required: true
-			},
-			agilityProperties: {
-				type: AgilityProperties,
-				required: true
-			}
-		}
-
-		model.fields.forEach((field: any) => {
-
-			const fieldName = camelize(field.name)
-
-			const modelID = parseInt(field.settings.ContentDefinition || "0")
-			const renderAs = field.settings.RenderAs || null
-			let linkedModelName = null
-			if (!isNaN(modelID) && modelID > 0) {
-				//this is a linked content field
-				const linkedModel = agilityModels[modelID]
-				linkedModelName = linkedModel.referenceName
-			}
-
-			fields[fieldName] = {
-				type: field.type === "Date" ? "Date"
-					: field.type === "Integer" ? "Int"
-						: field.type === "Decimal" ? "Float"
-							: field.type === "Boolean" ? "Boolean"
-								: field.type === "FileAttachment" ? AgilityFileAttachment
-									: field.type === "ImageAttachment" ? AgilityImageAttachment
-										: field.type === "Link" ? AgiltyLinkField
-											: field.type === "Content" && linkedModelName ? linkedModelName
-												: "String",
-				required: field.settings.Required === "True",
-				list: field.type !== "Link" ? false : renderAs === "dropdown" ? false : true,
-			}
-		});
-
-		define.nodeModel({
-			name: model.referenceName,
-			cacheFieldName: "agilityVersionId",
-			fields
-		});
-
-	})
-
-	outputMessage("Models added...")
-
-	// define.nodeModel({
-	// 	name: "User",
-	// 	fields: {
-	// 		name: {
-	// 			type: "String",
-	// 			required: true,
-	// 		},
-	// 		posts: {
-	// 			type: "Post",
-	// 			list: true,
-	// 		},
-	// 	},
-	// });
-
-	// define.nodeModel({
-	// 	name: "Post",
-	// 	fields: {
-	// 		title: {
-	// 			type: "String",
-	// 			required: true,
-	// 		},
-	// 		blocks: {
-	// 			list: true,
-	// 			required: true,
-	// 			type: define.object({
-	// 				name: "Blocks",
-	// 				fields: {
-	// 					title: {
-	// 						type: "String",
-	// 					},
-	// 					content: {
-	// 						type: "String",
-	// 					},
-	// 				},
-	// 			}),
-	// 		},
-	// 	},
-	// });
 });
 
 /**
  * Create the nodes for the first time...
  * Docs here: https://sdk.netlify.com/connectors/develop/
  */
-connector.event("createAllNodes", async ({ models },) => {
+connector.event("createAllNodes", async ({ models, cache }, configOptions) => {
 
-	console.log("*** AGILITY integration.createAllNodes")
+	await syncAgilityContent({ configOptions, models, cache })
 
+	/*
+		models["Post"].create({
+			id: "124",
+			title: "Virtual Tours - Ways to Travel From Home",
+			slug: "virtual-tours-ways-to-travel-from-home",
+			"date": "2021-03-31T13:17:50+00:00",
+			"category": "110",
+			"image": {
+				"label": "Virtual Tour",
+				"url": "https://cdn-dev.aglty.io/hqokwsfv/posts/virtual-tour_20210331171226_0.jpg",
+				"target": null,
+				"filesize": 279207,
+				"height": 1542,
+				"width": 2048
+			},
+			"content": "<p>Virtual tours can open up ama</p>",
+			"categoryId": "110"
 
+		});
 
-	models["Post"].create({
-		id: "124",
-		title: "Virtual Tours - Ways to Travel From Home",
-		slug: "virtual-tours-ways-to-travel-from-home",
-		"date": "2021-03-31T13:17:50+00:00",
-		"category": "110",
-		"image": {
-			"label": "Virtual Tour",
-			"url": "https://cdn-dev.aglty.io/hqokwsfv/posts/virtual-tour_20210331171226_0.jpg",
-			"target": null,
-			"filesize": 279207,
-			"height": 1542,
-			"width": 2048
-		},
-		"content": "<p>Virtual tours can open up ama</p>",
-		"categoryId": "110"
-
-	});
-
-
+	*/
 
 	/*
 
@@ -232,9 +132,10 @@ connector.event("createAllNodes", async ({ models },) => {
  * Content Delta! Do a sync pull down the delta and update the nodes
  * Docs here: https://sdk.netlify.com/connectors/develop/
  */
-connector.event("updateNodes", async ({ models, cache }) => {
+connector.event("updateNodes", async ({ models, cache }, configOptions) => {
 
-	console.log("*** AGILITY integration.updateNodes")
+	await syncAgilityContent({ configOptions, models, cache })
+
 
 	/*
 	models.User.create({

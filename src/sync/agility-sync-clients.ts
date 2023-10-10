@@ -1,16 +1,22 @@
 import agilitySync from "@agility/content-sync"
 let syncInterfaceNetlify = require("./agility-sync-interface.cjs");
-
-import { outputMessage } from "../util/log";
+import agilityAPI from '@agility/content-fetch'
 
 interface IAgilitySyncConfig {
 	configOptions: Record<string, any>
-	cache: any
 	models: Record<string, any>
+	cache: any
 
 }
 
-export const syncAgilityContent = async ({ configOptions, cache, models }: IAgilitySyncConfig) => {
+interface IAgilitySyncClients {
+	fetchSyncClient: any
+	previewSyncClient: any
+}
+
+export const getAgilitySyncClients = ({ configOptions, models, cache }: IAgilitySyncConfig): IAgilitySyncClients => {
+
+	const baseUrl = null //"https://localhost:5001"
 
 	const fetchSyncClient = agilitySync.getSyncClient({
 		guid: configOptions.guid,
@@ -31,9 +37,6 @@ export const syncAgilityContent = async ({ configOptions, cache, models }: IAgil
 		},
 	});
 
-	outputMessage("Syncing fetch...")
-	await fetchSyncClient.runSync()
-
 	const previewSyncClient = agilitySync.getSyncClient({
 		guid: configOptions.guid,
 		apiKey: configOptions.previewAPIToken,
@@ -53,12 +56,10 @@ export const syncAgilityContent = async ({ configOptions, cache, models }: IAgil
 		},
 	});
 
-	//sync the content for preview and fetch
-	outputMessage("Syncing preview...")
-	await previewSyncClient.runSync()
 
-
-
-	outputMessage("Syncing complete.")
+	return {
+		fetchSyncClient,
+		previewSyncClient
+	}
 
 }

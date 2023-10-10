@@ -2,6 +2,12 @@ export const defineAgilityProperties = (define: any) => {
 	const AgilityProperties = define.object({
 		name: "AgilityProperties",
 		fields: {
+			locale: {
+				type: "String",
+			},
+			preview: {
+				type: "Boolean",
+			},
 			state: {
 				type: "Int",
 			},
@@ -20,6 +26,7 @@ export const defineAgilityProperties = (define: any) => {
 			itemOrder: {
 				type: "Int",
 			},
+
 		},
 	});
 

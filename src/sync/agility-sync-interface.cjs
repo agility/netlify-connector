@@ -4,6 +4,18 @@
 // }
 
 const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
+
+	const cache = options.cache
+	const preview = options.preview
+
+	const itemKey = `${itemType}-${itemID}-${preview ? "preview" : "fetch"}`
+
+	if (itemType === "state") {
+		console.log("***** save sync state", itemKey, item)
+		await cache.set(itemKey, item);
+		return
+	}
+
 	/*
 	const nodeID = getNodeID({ options, itemType, languageCode, itemID });
 	let typeName = `agility${itemType}`;
@@ -98,6 +110,18 @@ const mergeItemToList = async ({ options, item, languageCode, itemID, referenceN
 }
 
 const getItem = async ({ options, itemType, languageCode, itemID }) => {
+
+	const cache = options.cache
+	const preview = options.preview
+
+	const itemKey = `${itemType}-${itemID}-${preview ? "preview" : "fetch"}`
+
+	if (itemType === "state") {
+		const retItem = await cache.get(itemKey);
+		console.log("***** get sync state", itemKey, retItem)
+		return retItem;
+	}
+
 	/*
 	const nodeID = getNodeID({ options, itemType, languageCode, itemID });
 	const node = await options.getNode(nodeID);

@@ -1,6 +1,6 @@
 export const defineFileAttachment = (define: any) => {
 	const AgilityFileAttachment = define.object({
-		name: "AgilityFileAttachment",
+		name: "FileAttachment",
 		fields: {
 			label: {
 				type: "String",

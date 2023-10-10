@@ -6,7 +6,7 @@ export const defineAgilitySitemaps = (define: any) => {
 
 	//sitemaps are a single JSON field
 	define.nodeModel({
-		name: "AgilitySitemapFlat",
+		name: "SitemapFlat",
 		fields: {
 			referenceName: {
 				type: "String",
@@ -28,7 +28,7 @@ export const defineAgilitySitemaps = (define: any) => {
 	})
 
 	define.nodeModel({
-		name: "AgilitySitemapNested",
+		name: "SitemapNested",
 		fields: {
 			referenceName: {
 				type: "String",

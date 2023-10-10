@@ -4,7 +4,7 @@ export const defineAgilityLayout = (define: any) => {
 
 	// #region *** ExtraTypes for Layouts ***
 	const AgilityLayoutProperties = define.object({
-		name: "AgilityLayoutProperties",
+		name: "LayoutProperties",
 		fields: {
 			state: {
 				type: "Int",
@@ -14,12 +14,20 @@ export const defineAgilityLayout = (define: any) => {
 			},
 			versionId: {
 				type: "Int",
-			}
+			},
+			preview: {
+				type: "Boolean",
+				required: true
+			},
+			locale: {
+				type: "String",
+				required: true
+			},
 		}
 	})
 
 	const AgilityLayoutVisibility = define.object({
-		name: "AgilityLayoutVisibility",
+		name: "LayoutVisibility",
 		fields: {
 			menu: {
 				type: "Boolean",
@@ -31,7 +39,7 @@ export const defineAgilityLayout = (define: any) => {
 	})
 
 	const AgilityLayoutSeo = define.object({
-		name: "AgilityLayoutSeo",
+		name: "LayoutSeo",
 		fields: {
 			metaDescription: {
 				type: "String",
@@ -46,7 +54,7 @@ export const defineAgilityLayout = (define: any) => {
 	})
 
 	const AgilityLayoutScripts = define.object({
-		name: "AgilityLayoutScripts",
+		name: "LayoutScripts",
 		fields: {
 			excludedFromGlobal: {
 				type: "Boolean",
@@ -59,15 +67,41 @@ export const defineAgilityLayout = (define: any) => {
 			}
 		}
 	})
+	const AgilityDynamicLayout = define.object({
+		name: "DynamicLayout",
+		fields: {
+			referenceName: {
+				type: "String"
+			},
+			fieldName: {
+				type: "String"
+			},
+			titleFormula: {
+				type: "String",
+			},
+			menuTextFormula: {
+				type: "String",
+			},
+			pageNameFormula: {
+				type: "String",
+			},
+			visibleOnMenu: {
+				type: "Boolean",
+			},
+			visibleOnSitemap: {
+				type: "Boolean",
+			},
+		}
+	})
 
 	//#endregion END ExtraTypes
 	outputMessage("Adding Layout Model...")
 	define.nodeModel({
-		name: "AgilityLayout",
+		name: "Layout",
 		cacheFieldName: "versionId",
 		fields: {
-			isAgilityPreview: {
-				type: "Boolean",
+			layoutId: {
+				type: "Int",
 				required: true
 			},
 			properties: {
@@ -90,22 +124,21 @@ export const defineAgilityLayout = (define: any) => {
 				type: AgilityLayoutScripts,
 				required: true
 			},
+			dynamic: {
+				type: AgilityDynamicLayout,
+				required: false
+			},
 			name: {
 				type: "String",
-				required: true
 			},
 			path: {
 				type: "String",
-				required: false
 			},
-
 			title: {
 				type: "String",
-				required: true
 			},
 			menuText: {
-				type: "String",
-				required: true
+				type: "String"
 			},
 
 			pageType: {
@@ -131,6 +164,9 @@ export const defineAgilityLayout = (define: any) => {
 				type: "Boolean",
 				required: true
 			},
+			zones: {
+				type: "JSON"
+			}
 		}
 	})
 

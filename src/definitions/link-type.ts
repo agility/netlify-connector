@@ -1,6 +1,6 @@
 export const defineLinkField = (define: any) => {
 	const AgilityLink = define.object({
-		name: "AgilityLink",
+		name: "Link",
 		fields: {
 			href: {
 				type: "String",

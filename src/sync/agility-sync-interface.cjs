@@ -1,24 +1,126 @@
-// const getNodeID = ({ options, itemType, languageCode, itemID }) => {
-// 	const preStr = `agility${languageCode}-${itemType}-${itemID}`.toLowerCase();
-// 	return options.createNodeId(preStr);
-// }
+import { camelize } from "../util/camelize"
 
 const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 
 	const cache = options.cache
 	const preview = options.preview
+	const models = options.models
 
 	const itemKey = `${itemType}-${itemID}-${preview ? "preview" : "fetch"}`
+	const id = getNodeID({ options, itemType, languageCode, itemID });
 
-	if (itemType === "state") {
-		console.log("***** save sync state", itemKey, item)
-		await cache.set(itemKey, item);
-		return
+	switch (itemType) {
+		case "state":
+			//state is special we store it in the cache...
+			await cache.set(itemKey, item);
+			return
+		case "item": {
+			const properties = {
+				preview,
+				locale: languageCode,
+				state: item.properties.state,
+				modified: item.properties.modified,
+				versionId: item.properties.versionID,
+				referenceName: item.properties.referenceName,
+				definitionName: item.properties.definitionName,
+				itemOrder: item.properties.itemOrder
+			}
+			console.log("***** save sync item", item.properties)
+			const model = models[item.properties.definitionName]
+			if (!model) {
+
+				console.log("no model found for content definition", item.properties.definitionName)
+
+				//if we don't have a specific model for this content definition, then it's a "component"
+				models["Component"].create({
+					id,
+					contentId: item.contentID,
+					versionId: item.properties.versionID,
+					properties,
+					content: item.fields
+				})
+			} else {
+				console.log("***** save sync item", item)
+
+				const fields = {}
+				for (const key in item.fields) {
+					const fieldName = camelize(key)
+					fields[fieldName] = item.fields[key]
+				}
+
+				model.create({
+					id,
+					contentId: item.contentID,
+					versionId: item.properties.versionID,
+					properties,
+					...fields
+				})
+			}
+			return
+		}
+		case "nestedsitemap":
+			models["SitemapNested"].create({
+				id,
+				referenceName: itemID,
+				locale: languageCode,
+				preview,
+				nodes: item
+			})
+			return
+		case "sitemap":
+			models["SitemapFlat"].create({
+				id,
+				referenceName: itemID,
+				locale: languageCode,
+				preview,
+				nodes: item
+			})
+			return
+		case "page":
+			item.properties.versionId = item.properties.versionID
+			delete item.properties.versionID
+
+			models["Layout"].create({
+				id,
+				layoutId: item.pageID,
+				versionId: item.properties.versionId.toString(),
+				properties: {
+					preview,
+					locale: languageCode,
+					...item.properties
+				},
+				visible: item.visible,
+				scripts: item.scripts,
+				seo: {
+					metaDescription: item.metaDescription,
+					metaKeywords: item.metaKeywords,
+					metaHtml: item.metaHtml
+				},
+				name: item.name,
+				path: item.path,
+				title: item.title,
+				menuText: item.menuText,
+				pageType: item.pageType,
+				templateName: item.templateName,
+				redirectUrl: item.redirectUrl,
+				securePage: item.securePage,
+				excludeFromOutputCache: item.excludeFromOutputCache,
+				zones: item.zones,
+				dynamic: item.dynamic
+
+			})
+			return
 	}
 
+
+
+	console.log("***** save sync item id", id, "type:", itemType)
+	//console.log("***** save sync item", item)
+
+
+
+
 	/*
-	const nodeID = getNodeID({ options, itemType, languageCode, itemID });
-	let typeName = `agility${itemType}`;
 
 	let nodeObj = {
 		languageCode: languageCode,
@@ -138,6 +240,11 @@ const clearItems = async ({ options }) => {
 	//don't need to handle this - gatsby clear will do that for us...
 }
 
+
+const getNodeID = ({ options, itemType, languageCode, itemID }) => {
+	return `agility.${options.preview ? "preview" : "fetch"}.${languageCode}.${itemType}.${itemID}`.toLowerCase();
+
+}
 
 
 module.exports = {

@@ -1,6 +1,6 @@
 export const defineAgilityProperties = (define: any) => {
 	const AgilityProperties = define.object({
-		name: "AgilityProperties",
+		name: "Properties",
 		fields: {
 			locale: {
 				type: "String",

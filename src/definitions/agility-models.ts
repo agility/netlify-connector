@@ -21,14 +21,18 @@ export const defineAgilityModels = async ({ define, cache, fetchApiClient }: Pro
 
 	//define a generic model for Components
 	define.nodeModel({
-		name: "AgilityComponent",
+		name: "Component",
 		fields: {
 			//every type has an Agility properties type and a special cache field based on the version ID and the typename
+			contentId: {
+				type: "Int",
+				required: true
+			},
 			versionId: {
 				type: "String",
 				required: true
 			},
-			agilityProperties: {
+			properties: {
 				type: AgilityProperties,
 				required: true
 			},
@@ -52,15 +56,15 @@ export const defineAgilityModels = async ({ define, cache, fetchApiClient }: Pro
 		//build the fields first
 		let fields: any = {
 			//every type has an Agility properties type and a special cache field based on the version ID and the typename
+			contentId: {
+				type: "Int",
+				required: true
+			},
 			versionId: {
 				type: "String",
 				required: true
 			},
-			isAgilityPreview: {
-				type: "Boolean",
-				required: true
-			},
-			agilityProperties: {
+			properties: {
 				type: AgilityProperties,
 				required: true
 			}
@@ -89,7 +93,7 @@ export const defineAgilityModels = async ({ define, cache, fetchApiClient }: Pro
 										: field.type === "Link" ? AgiltyLinkField
 											: field.type === "Content" && linkedModelName ? linkedModelName
 												: "String",
-				required: field.settings.Required === "True",
+				required: field.type === "Link" ? false : field.settings.Required === "True",
 				list: field.type !== "Link" ? false : renderAs === "dropdown" ? false : true,
 			}
 		});

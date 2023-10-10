@@ -1,6 +1,6 @@
 export const defineImageAttachment = (define: any) => {
 	const AgilityImageAttachment = define.object({
-		name: "AgilityImageAttachment",
+		name: "ImageAttachment",
 		fields: {
 			label: {
 				type: "String",
@@ -20,6 +20,12 @@ export const defineImageAttachment = (define: any) => {
 			width: {
 				type: "Int",
 			},
+			pixelHeight: {
+				type: "String"
+			},
+			pixelWidth: {
+				type: "String"
+			}
 		},
 	});
 

@@ -1,12 +1,32 @@
 import { camelize } from "../util/camelize"
 import { MODELS_CACHE_KEY } from "../constants"
 
+/*****************************************************************
+ * This file is a plugin for the Agility Sync SDK
+ * It provides the following methods
+ * - saveItem - save an item
+ * - deleteItem - deletes an item
+ * - getItem - gets an item (only used for a couple things)
+ *******************************************************************/
+
+
+/**
+ * Save an item to the persistence layer.
+ * For most items, it's the GraphQL layer, but for state, it's the cache
+ *
+ * @param {
+ * 	options: object - the options object passed into the sync - this has te cache, models, and whether we are in preview mode
+ * 	itemType: string - the type of item being synced (item, page, etc)
+ * 	languageCode: string - the locale code of this item
+ * 	itemID: string - the ID (from Agility ) of this item
+ * } param0
+ * @returns
+ */
 const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 
 	const cache = options.cache
 	const preview = options.preview
 	const models = options.models
-
 
 	const id = getNodeID({ options, itemType, languageCode, itemID });
 
@@ -66,13 +86,22 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 
 					if (field.type === "Content") {
 
-						if (fieldValue.contentid) {
+
+						if (fieldValue?.contentid) {
 							//a single linked content item value
 							const linkedContentID = getNodeID({ options, itemType: "item", languageCode, itemID: fieldValue.contentid })
 							fieldValue = linkedContentID
+						} else if (fieldValue?.sortids) {
+							//a multi linked content item value
+							fieldValue = fieldValue.sortids
+								.split(",")
+								.map(contentID => getNodeID({ options, itemType: "item", languageCode, itemID: contentID }))
+						} else if (fieldValue?.referencename) {
+							fieldValue = {
+								referenceName: fieldValue.referencename
+							}
 						} else {
-
-							console.log(modelReferenceName, "content field", fieldName, fieldValue)
+							console.log("******* linked content model", modelReferenceName, "content field", fieldName, fieldValue)
 						}
 					}
 
@@ -165,7 +194,16 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 }
 
 
+/**
+ * Delete an item from storage
+ * @param {
+ * 	options: object - the options object passed into the sync
+ * 	itemType: string - the type of item being synced (item, page, etc)
+ * 	languageCode: string - the locale code of this item
+ * 	itemID: string - the ID (from Agility ) of this item
+ * } param0
 
+ */
 const deleteItem = async ({ options, itemType, languageCode, itemID }) => {
 	/*
 	const nodeID = getNodeID({ options, itemType, languageCode, itemID });
@@ -177,21 +215,22 @@ const deleteItem = async ({ options, itemType, languageCode, itemID }) => {
 	*/
 }
 
+
 const mergeItemToList = async ({ options, item, languageCode, itemID, referenceName, definitionName }) => {
-	/*
-	//save the item in a list based on the content definition name...
-	if (item.properties.state === 3) {
-		//handle deletes
-
-		await deleteItem({ options, itemType: definitionName, languageCode, itemID });
-
-	} else {
-		//save the item in the list
-		await saveItem({ options, item: item, itemType: definitionName, languageCode, itemID });
-	}
-	*/
+	//we don't need to do this
+	//this method is only used when we want to store content items in a list separately
 }
 
+/**
+ * Get an item from the persisted storage (in this case, we only need to get stuff from cache)
+ * @param {
+ * 	options: object - the options object passed into the sync
+ * 	itemType: string - the type of item being synced (item, page, etc)
+ * 	languageCode: string - the locale code of this item
+ * 	itemID: string - the ID (from Agility ) of this item
+ * } param0
+ * @returns
+ */
 const getItem = async ({ options, itemType, languageCode, itemID }) => {
 
 	const cache = options.cache
@@ -211,25 +250,19 @@ const getItem = async ({ options, itemType, languageCode, itemID }) => {
 		return retItem
 	}
 
-	console.log("getItem", itemType, itemKey, languageCode)
+	console.log("unhandled item type", itemType, "locale", languageCode, "item", item)
 
-	/*
-	const nodeID = getNodeID({ options, itemType, languageCode, itemID });
-	const node = await options.getNode(nodeID);
-	if (node == null) return null;
-
-	const json = node.internal.content;
-	const item = JSON.parse(json);
-
-	return item;
-	*/
 }
 
 const clearItems = async ({ options }) => {
-	//don't need to handle this - gatsby clear will do that for us...
+	//don't need to handle this - the 'yarn clear' cmd will do that for us...
 }
 
 
+/**
+ * Generate a proper node id for Netlify so that it will have all the info about an item to make it unique
+ * @returns the node id
+ */
 const getNodeID = ({ options, itemType, languageCode, itemID }) => {
 	return `agility.${options.preview ? "preview" : "fetch"}.${languageCode}.${itemType}.${itemID}`.toLowerCase();
 

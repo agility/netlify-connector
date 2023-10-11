@@ -7,6 +7,16 @@ import { defineAgilitySitemaps } from "./definitions/agility-sitemaps";
 import { syncAgilityContent } from "./sync/agility-sync";
 import { defineAgilityRedirection } from "./definitions/agility-redirection";
 
+/*
+	 ___         _ ___ __           _   __     __  ___ ____         ______                            __
+	/   | ____ _(_) (_) /___  __   / | / /__  / /_/ (_) __/_  __   / ____/___  ____  ____  ___  _____/ /_
+  / /| |/ __ `/ / / / __/ / / /  /  |/ / _ \/ __/ / / /_/ / / /  / /   / __ \/ __ \/ __ \/ _ \/ ___/ __/
+ / ___ / /_/ / / / / /_/ /_/ /  / /|  /  __/ /_/ / / __/ /_/ /  / /___/ /_/ / / / / / / /  __/ /__/ /_
+/_/  |_\__, /_/_/_/\__/\__, /  /_/ |_/\___/\__/_/_/_/  \__, /   \____/\____/_/ /_/_/ /_/\___/\___/\__/
+		/____/          /____/                          /____/
+*/
+
+
 const integration = new NetlifyIntegration();
 const connector = integration.addConnector({
 	typePrefix: "Agility",

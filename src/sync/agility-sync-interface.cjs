@@ -49,6 +49,9 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 			}
 			const modelReferenceName = item.properties.definitionName
 			const model = models[modelReferenceName]
+
+			let netlifyModelName = modelReferenceName
+
 			if (!model) {
 
 				//if we don't have a specific model for this content definition, then it's a "component"
@@ -59,6 +62,9 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 					properties,
 					content: item.fields
 				})
+
+				netlifyModelName = "Component"
+
 			} else {
 
 				//TODO: handle linked content fields...
@@ -101,7 +107,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 								referenceName: fieldValue.referencename
 							}
 						} else {
-							console.log("******* linked content model", modelReferenceName, "content field", fieldName, fieldValue)
+							console.warn("******* unknown linked content model", modelReferenceName, "content field", fieldName, fieldValue)
 						}
 					}
 
@@ -110,6 +116,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 					}
 				})
 
+				//save the actual item
 				model.create({
 					id,
 					contentId: item.contentID,
@@ -117,6 +124,11 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 					properties,
 					...fields
 				})
+
+				//save the ID in a lookup table so we can find it's referenceName later if we need to delete it...
+				cache.set(id, netlifyModelName)
+
+
 			}
 			return
 		}
@@ -202,16 +214,49 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
  */
 const deleteItem = async ({ options, itemType, languageCode, itemID }) => {
 
-	//TODO: handle deletes...
+	const cache = options.cache
+	const preview = options.preview
+	const models = options.models
 
-	/*
-	const nodeID = getNodeID({ options, itemType, languageCode, itemID });
-	const node = options.getNode(nodeID);
+	const id = getNodeID({ options, itemType, languageCode, itemID });
 
-	if (node) {
-		options.deleteNode(node);
+	switch (itemType) {
+		case "state":
+			//state is special we store it in the cache...
+			const itemKey = `${itemType} - ${itemID} - ${preview ? "preview" : "fetch"}`
+			await cache.del(itemKey);
+			return
+		case "item": {
+			const modelReferenceName = await cache.get(id)
+
+			const model = models[modelReferenceName]
+			if (model) {
+				model.delete(id)
+			}
+			await cache.del(id)
+			return
+		}
+		case "nestedsitemap":
+			models["SitemapNested"].delete(id)
+			return
+		case "sitemap":
+			models["SitemapFlat"].delete(id)
+			return
+		case "page":
+			models["Layout"].delete(id)
+			return
+		case "urlredirections": {
+
+			//add the full object to the cache so we can track the lastAccessDate
+			await cache.del(itemType);
+
+			//add the redirection items to graphql
+			models["Redirections"].delete(id)
+			return
+		}
 	}
-	*/
+
+
 }
 
 
@@ -235,7 +280,7 @@ const getItem = async ({ options, itemType, languageCode, itemID }) => {
 	const cache = options.cache
 	const preview = options.preview
 
-
+	const id = getNodeID({ options, itemType, languageCode, itemID });
 
 	if (itemType === "state") {
 		//get the state from cache...
@@ -247,9 +292,19 @@ const getItem = async ({ options, itemType, languageCode, itemID }) => {
 		//get the last mod date for the url redirections
 		const retItem = await cache.get(itemType);
 		return retItem
-	}
+	} else if (itemType === "item") {
+		const definitionName = await cache.get(id)
 
-	console.log("unhandled item type", itemType, "locale", languageCode, "item", item)
+		if (!definitionName) return null
+
+		//return a fake content item that is ONLY used to check the item is available before deleting it...
+		return {
+			contentID: itemID,
+			properties: {
+				definitionName
+			}
+		}
+	}
 
 }
 

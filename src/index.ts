@@ -77,7 +77,6 @@ connector.model(async ({ define, cache }, configOptions) => {
 	defineAgilitySitemaps(define)
 	defineAgilityRedirection(define)
 
-
 	outputMessage("Adding Content Models...")
 
 	//build the content models
@@ -93,18 +92,25 @@ connector.model(async ({ define, cache }, configOptions) => {
  */
 connector.event("createAllNodes", async ({ models, cache }, configOptions) => {
 
+	outputMessage("Pulling content for initial sync..")
 	await syncAgilityContent({ configOptions, models, cache })
+	outputMessage("Initial content pull complete.")
+
+
 
 });
 
 /**
  * Content Delta! Do a sync pull down the delta and update the nodes
- * Docs here: https://sdk.netlify.com/connectors/develop/
+ * Netlify Docs here: https://sdk.netlify.com/connectors/develop/
  */
 connector.event("updateNodes", async ({ models, cache }, configOptions) => {
 
+	outputMessage("Pulling content for delta sync..")
+
 	await syncAgilityContent({ configOptions, models, cache })
 
+	outputMessage("Delta content pull complete.")
 
 });
 

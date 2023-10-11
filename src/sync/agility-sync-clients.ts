@@ -20,7 +20,7 @@ export const getAgilitySyncClients = ({ configOptions, models, cache }: IAgility
 
 	const fetchSyncClient = agilitySync.getSyncClient({
 		guid: configOptions.guid,
-		apiKey: configOptions.fetchAPIToken,
+		apiKey: configOptions.fetchAPIKey,
 		isPreview: false,
 		debug: false,
 		channels: configOptions.sitemaps.split(","),
@@ -39,7 +39,7 @@ export const getAgilitySyncClients = ({ configOptions, models, cache }: IAgility
 
 	const previewSyncClient = agilitySync.getSyncClient({
 		guid: configOptions.guid,
-		apiKey: configOptions.previewAPIToken,
+		apiKey: configOptions.previewAPIKey,
 		isPreview: true,
 		debug: false,
 		channels: configOptions.sitemaps.split(","),

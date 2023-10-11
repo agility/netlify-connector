@@ -187,10 +187,6 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 	}
 
 
-
-	console.log("***** save sync item id", id, "type:", itemType)
-	console.log("***** save sync item", item)
-
 }
 
 
@@ -205,6 +201,9 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 
  */
 const deleteItem = async ({ options, itemType, languageCode, itemID }) => {
+
+	//TODO: handle deletes...
+
 	/*
 	const nodeID = getNodeID({ options, itemType, languageCode, itemID });
 	const node = options.getNode(nodeID);

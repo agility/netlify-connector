@@ -21,7 +21,7 @@ export const getAgilityAPIClients = ({ configOptions, models }: IAgilitySyncConf
 
 	const fetchApiClient = agilityAPI.getApi({
 		guid: configOptions.guid,
-		apiKey: configOptions.fetchAPIToken,
+		apiKey: configOptions.fetchAPIKey,
 		baseUrl
 	});
 
@@ -29,14 +29,14 @@ export const getAgilityAPIClients = ({ configOptions, models }: IAgilitySyncConf
 
 	const previewApiClient = agilityAPI.getApi({
 		guid: configOptions.guid,
-		apiKey: configOptions.previewAPIToken,
+		apiKey: configOptions.previewAPIKey,
 		isPreview: true,
 		baseUrl
 	});
 
 	const fetchSyncClient = agilitySync.getSyncClient({
 		guid: configOptions.guid,
-		apiKey: configOptions.fetchAPIToken,
+		apiKey: configOptions.fetchAPIKey,
 		isPreview: false,
 		debug: false,
 		channels: configOptions.sitemaps.split(","),
@@ -57,7 +57,7 @@ export const getAgilityAPIClients = ({ configOptions, models }: IAgilitySyncConf
 
 	const previewSyncClient = agilitySync.getSyncClient({
 		guid: configOptions.guid,
-		apiKey: configOptions.previewAPIToken,
+		apiKey: configOptions.previewAPIKey,
 		isPreview: true,
 		debug: false,
 		channels: configOptions.sitemaps.split(","),

@@ -66,6 +66,7 @@ export const defineAgilityModels = async ({ define, cache, fetchApiClient }: Pro
 		outputMessage("Adding Model: ", model.referenceName)
 
 		//build the fields first
+		//TODO: add the SEO properties to this...
 		let fields: any = {
 			//every type has an Agility properties type and a special cache field based on the version ID and the typename
 			contentId: {
@@ -123,9 +124,6 @@ export const defineAgilityModels = async ({ define, cache, fetchApiClient }: Pro
 				list,
 			}
 		});
-
-		console.log("gql fields", fields)
-		//console.log("model fields", model.fields)
 
 		define.nodeModel({
 			name: model.referenceName,

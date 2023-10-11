@@ -14,6 +14,7 @@ import { defineAgilityRedirection } from "./definitions/agility-redirection";
  / ___ / /_/ / / / / /_/ /_/ /  / /|  /  __/ /_/ / / __/ /_/ /  / /___/ /_/ / / / / / / /  __/ /__/ /_
 /_/  |_\__, /_/_/_/\__/\__, /  /_/ |_/\___/\__/_/_/_/  \__, /   \____/\____/_/ /_/_/ /_/\___/\___/\__/
 		/____/          /____/                          /____/
+
 */
 
 
@@ -22,8 +23,8 @@ const connector = integration.addConnector({
 	typePrefix: "Agility",
 	localDevOptions: {
 		guid: "2b17d772-d",
-		fetchAPIToken: "defaultlive.ea30c52c8d2af8989ed15578997fac51b7ede4eb4f1878ab6c76867e945541d7",
-		previewAPIToken: "defaultpreview.ab58cfd7fc5acbc7af2b3277feee018c5501275b2f6e48120e7c6ec3690dc76c",
+		fetchAPIKey: "defaultlive.ea30c52c8d2af8989ed15578997fac51b7ede4eb4f1878ab6c76867e945541d7",
+		previewAPIKey: "defaultpreview.ab58cfd7fc5acbc7af2b3277feee018c5501275b2f6e48120e7c6ec3690dc76c",
 		locales: "en-us",
 		sitemaps: "website"
 	},
@@ -40,12 +41,12 @@ connector.defineOptions(({ zod }) => {
 			helpText: "The guid from your Agility instance.",
 			secret: false,
 		}),
-		fetchAPIToken: zod.string().meta({
+		fetchAPIKey: zod.string().meta({
 			label: "Fetch API token",
 			helpText: "The fetch API token from your Agility instance",
 			secret: true,
 		}),
-		previewAPIToken: zod.string().meta({
+		previewAPIKey: zod.string().meta({
 			label: "Preview API token",
 			helpText: "The preview API token from your Agility instance",
 			secret: true,

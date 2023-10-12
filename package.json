@@ -6,6 +6,7 @@
   "scripts": {
     "build": "ntli build -a",
     "dev": "ntli dev -c",
+    "test": "NODE_ENV=test ts-mocha -r esm -p test/tsconfig.json test/**/*.ts",
     "preview": "ntli preview",
     "clean": "rm -rf .cache",
     "help": "ntli -h"
@@ -17,5 +18,15 @@
     "axios": "^1.5.1",
     "chalk": "^5.3.0",
     "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.7",
+    "@types/expect": "^24.3.0",
+    "@types/mocha": "^10.0.2",
+    "chai": "^4.3.10",
+    "esm": "^3.2.25",
+    "mocha": "^10.2.0",
+    "ts-mocha": "^10.0.0",
+    "ts-node": "^10.9.1"
   }
 }

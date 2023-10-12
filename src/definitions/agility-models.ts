@@ -2,6 +2,7 @@ import { getModels } from "../sync/agility-get-models"
 import { camelize } from "../util/camelize"
 import { outputMessage } from "../util/log"
 import { defineAgilityProperties } from "./agility-properties"
+import { defineContentSEO } from "./content-seo"
 import { defineFileAttachment } from "./file-attachment"
 import { defineImageAttachment } from "./image-attachment"
 import { defineLinkField } from "./link-type"
@@ -29,7 +30,8 @@ export const defineAgilityModels = async ({ define, cache, fetchApiClient }: Pro
 	const AgilityImageAttachment = defineImageAttachment(define)
 	const AgiltyLinkField = defineLinkField(define)
 	const AgilityProperties = defineAgilityProperties(define)
-	const AgilityLinkedList = defineLinkedList(define)
+	const AgilityContentSeo = defineContentSEO(define)
+	defineLinkedList(define)
 
 	//define a generic model for Components
 	define.nodeModel({
@@ -80,6 +82,9 @@ export const defineAgilityModels = async ({ define, cache, fetchApiClient }: Pro
 			properties: {
 				type: AgilityProperties,
 				required: true
+			},
+			seo: {
+				type: AgilityContentSeo
 			}
 		}
 
@@ -88,7 +93,7 @@ export const defineAgilityModels = async ({ define, cache, fetchApiClient }: Pro
 			const fieldName = camelize(field.name)
 
 			let list = false
-			let linkedModelName = null
+			let linkedModelName: string | null = null
 			const modelID = parseInt(field.settings.ContentDefinition || "0")
 			const renderAs = field.settings.RenderAs || null
 

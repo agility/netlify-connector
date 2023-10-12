@@ -37,6 +37,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 			await cache.set(itemKey, item);
 			return
 		case "item": {
+
 			const properties = {
 				preview,
 				locale: languageCode,
@@ -83,6 +84,12 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 					return
 				}
 
+				const seo = item.seo || null
+				if (seo) {
+					seo.metaHtml = seo.metaHTML
+					delete seo.metaHTML
+				}
+
 				const fields = {}
 				agilityModel.fields.forEach(field => {
 
@@ -122,6 +129,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 					contentId: item.contentID,
 					versionId: item.properties.versionID,
 					properties,
+					seo: item.seo || null,
 					...fields
 				})
 

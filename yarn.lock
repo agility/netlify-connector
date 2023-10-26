@@ -484,17 +484,17 @@
     "@types/chance" "^1.1.3"
     chance "^1.1.9"
 
-"@netlify/sdk@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@netlify/sdk/-/sdk-1.0.5.tgz#38adf4672ece497cadb61f0419ee8d930ecd49d1"
-  integrity sha512-2yq/JbjQdSN+PyPSSwAcWXtiv2z9SZjmJVjq1FiEf3IYFvlAsa6vQRvUbKu6F/raQ7eJzPIpaK48uqVnpL5zrg==
+"@netlify/sdk@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@netlify/sdk/-/sdk-1.3.0.tgz#a06cc18bc1116bbaf71af99ff752ab59c5de24a9"
+  integrity sha512-JxhsrjXKbI2piLG6POVo8rfN57hbKte8i/di9+pcWetYliFF3C9Do6IWL25Rpv6/UeDGRdzwbJih+lxTkLegCg==
   dependencies:
     "@netlify/functions" "^1.6.0"
     "@netlify/integrations" "^0.6.0"
     camelcase "^7.0.1"
     chalk "^5.2.0"
     commander "^10.0.0"
-    content-engine "0.0.24"
+    content-engine "0.0.25"
     crypto-js "^4.1.1"
     esbuild "^0.17.12"
     esbuild-plugin-copy "^2.1.1"
@@ -1314,10 +1314,10 @@ content-disposition@0.5.4:
   dependencies:
     safe-buffer "5.2.1"
 
-content-engine@0.0.24:
-  version "0.0.24"
-  resolved "https://registry.yarnpkg.com/content-engine/-/content-engine-0.0.24.tgz#cc5e75b3541d962005ae7f8c08141c5c95a3a713"
-  integrity sha512-YCBQW9jUzvGs5xB6t8T4nnHGg87c9r+xemJFuo9Flee1zL9Q2SVIXGiok4kAAyoPF1K63+R8tqjML1QRpU4xjQ==
+content-engine@0.0.25:
+  version "0.0.25"
+  resolved "https://registry.yarnpkg.com/content-engine/-/content-engine-0.0.25.tgz#3bb18e6b5f678f3f57dfbf744479c74c7445df95"
+  integrity sha512-rnZZVMcOSQLuk/s/N5fK6ctNLRNM9JV9mItc6UDDYD7Suskf8QJRpSICU+ibTMTXbDD85rBOW7FAeASAkqZOyg==
   dependencies:
     "@babel/code-frame" "^7.18.6"
     "@babel/core" "^7.20.12"

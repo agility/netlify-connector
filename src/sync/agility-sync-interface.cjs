@@ -113,7 +113,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 							fieldValue = {
 								referenceName: fieldValue.referencename
 							}
-						} else {
+						} else if (fieldValue) {
 							console.warn("******* unknown linked content model", modelReferenceName, "content field", fieldName, fieldValue)
 						}
 					}

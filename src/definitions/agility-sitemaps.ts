@@ -16,10 +16,6 @@ export const defineAgilitySitemaps = (define: any) => {
 				type: "String",
 				required: true
 			},
-			preview: {
-				type: "Boolean",
-				required: true
-			},
 			nodes: {
 				type: "JSON",
 				required: true
@@ -36,10 +32,6 @@ export const defineAgilitySitemaps = (define: any) => {
 			},
 			locale: {
 				type: "String",
-				required: true
-			},
-			preview: {
-				type: "Boolean",
 				required: true
 			},
 			nodes: {

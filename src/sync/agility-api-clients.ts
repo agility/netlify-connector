@@ -1,6 +1,7 @@
 import agilitySync from "@agility/content-sync"
 let syncInterfaceNetlify = require("./agility-sync-interface.cjs");
 import agilityAPI from '@agility/content-fetch'
+import { config } from "chai";
 
 interface IAgilitySyncConfig {
 	configOptions: Record<string, any>
@@ -9,79 +10,45 @@ interface IAgilitySyncConfig {
 }
 
 interface IAgilityClients {
-	fetchApiClient: any
-	previewApiClient: any
-	fetchSyncClient: any
-	previewSyncClient: any
+	apiClient: any
+	syncClient: any
 }
 
 export const getAgilityAPIClients = ({ configOptions, models }: IAgilitySyncConfig): IAgilityClients => {
 
 	const baseUrl = null //"https://localhost:5001"
 
-	const fetchApiClient = agilityAPI.getApi({
+	const apiClient = agilityAPI.getApi({
 		guid: configOptions.guid,
-		apiKey: configOptions.fetchAPIKey,
+		apiKey: configOptions.apiKey,
+		isPreview: configOptions.isPreview,
 		baseUrl
 	});
 
-	//const models = await getModels({ apiClient: fetchApiClient })
 
-	const previewApiClient = agilityAPI.getApi({
+	const syncClient = agilitySync.getSyncClient({
 		guid: configOptions.guid,
-		apiKey: configOptions.previewAPIKey,
-		isPreview: true,
-		baseUrl
-	});
-
-	const fetchSyncClient = agilitySync.getSyncClient({
-		guid: configOptions.guid,
-		apiKey: configOptions.fetchAPIKey,
-		isPreview: false,
+		apiKey: configOptions.apiKey,
+		isPreview: configOptions.isPreview,
+		logLevel: configOptions.logLevel,
 		debug: false,
 		channels: configOptions.sitemaps.split(","),
 		languages: configOptions.locales.split(","),
 		store: {
-			//use gatsby sync interface
+			//use netlify sync interface
 			interface: syncInterfaceNetlify,
 			options: {
 				models
-				// getNode,
-				// createNodeId,
-				// createNode,
-				// createContentDigest,
-				// deleteNode,
 			},
 		},
 	});
 
-	const previewSyncClient = agilitySync.getSyncClient({
-		guid: configOptions.guid,
-		apiKey: configOptions.previewAPIKey,
-		isPreview: true,
-		debug: false,
-		channels: configOptions.sitemaps.split(","),
-		languages: configOptions.locales.split(","),
-		store: {
-			//use gatsby sync interface
-			interface: syncInterfaceNetlify,
-			options: {
-				models
-				// getNode,
-				// createNodeId,
-				// createNode,
-				// createContentDigest,
-				// deleteNode,
-			},
-		},
-	});
+
 
 
 	return {
-		fetchApiClient,
-		previewApiClient,
-		fetchSyncClient,
-		previewSyncClient
+		apiClient,
+		syncClient,
 	}
 
 }

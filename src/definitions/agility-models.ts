@@ -10,7 +10,7 @@ import { defineLinkedList } from "./linked-list"
 
 interface Props {
 	define: any
-	fetchApiClient: any
+	apiClient: any
 	cache: any
 }
 
@@ -24,7 +24,7 @@ interface Props {
  * 	 - render as grid or link - a LinkedContent obj with the referenceName of the linked list
  * @param param0
  */
-export const defineAgilityModels = async ({ define, cache, fetchApiClient }: Props) => {
+export const defineAgilityModels = async ({ define, cache, apiClient }: Props) => {
 
 	const AgilityFileAttachment = defineFileAttachment(define)
 	const AgilityImageAttachment = defineImageAttachment(define)
@@ -58,7 +58,7 @@ export const defineAgilityModels = async ({ define, cache, fetchApiClient }: Pro
 	});
 
 	//get the content models from Agility (or cache)
-	const agilityModels = await getModels({ apiClient: fetchApiClient, cache })
+	const agilityModels = await getModels({ apiClient, cache })
 
 	Object.keys(agilityModels).forEach(modelID => {
 		//create the models from Agility

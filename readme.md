@@ -4,11 +4,11 @@ Access all your Agility content through Netlify Connect.
 
 ## Config Values
 
-- guid: the GUID of your instance
-- fetchAPIKey: the Fetch API Key for your published / production content
-- previewAPIKey: the Preview API Key for your staging content.
-- locales: comma separated list of the locale codes in your instance that you want to pull content for
-- sitemaps: comma separated list of sitemap reference names that you want to pull layouts (pages) for
+- guid: the GUID of your instance.
+- apiKey: The fetch or preview API token from your Agility instance.
+- isPreview: Determines if you are viewing preview content. Match with the preview API key
+- locales: comma separated list of the locale codes in your instance that you want to pull content for.
+- sitemaps: comma separated list of sitemap reference names that you want to pull layouts (pages) for.
 
 ## Content Types
 
@@ -16,10 +16,9 @@ This connector makes all of your Content, Sitemaps, Layouts, Components and URL 
 
 Each GraphQL type is prefixed by **Agility**
 
-### Locales and Preview Mode
+### Locales
 
-- You will be able to query each kind of content for preview or not.
-- You can also include the locale in your query if you have multiple locales.
+- You will be able to query each kind of content based on its locale in your query if you have multiple locales.
 
 ### Linked Content
 
@@ -30,18 +29,17 @@ Each GraphQL type is prefixed by **Agility**
 
 #### Content List
 
-This following query shows a query to the `Post` Content Model, filtered by the `posts` content reference name, in `preview` mode.
+This following query shows a query to the `Post` Content Model, filtered by the `posts` content reference name.
 
 It also shows querying the 'title`from the`category` linked content dropdown field.
 
 ```
-allAgilityPost (filter: {properties: {preview: {eq: true}, referenceName: {eq: "posts"}}})
+allAgilityPost (filter: {properties: {referenceName: {eq: "posts"}}})
   {
     nodes {
       contentId
       properties {
         versionId
-        preview
         locale
       }
       category {
@@ -54,13 +52,12 @@ allAgilityPost (filter: {properties: {preview: {eq: true}, referenceName: {eq: "
 
 #### Flat Sitemap
 
-Gets the nodes from the flat sitemap (used for routing), filtered by `referenceName`, `locale`, and `preview` mode.
+Gets the nodes from the flat sitemap (used for routing), filtered by `referenceName`, `locale`.
 
 ```
-agilitySitemapFlat (referenceName: {eq: "website"}, preview: {eq: true}, locale:{eq:"en-us"}) {
+agilitySitemapFlat (referenceName: {eq: "website"}, locale:{eq:"en-us"}) {
     referenceName
     locale
-    preview
     nodes
   }
 ```

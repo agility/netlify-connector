@@ -15,7 +15,7 @@ import { MODELS_CACHE_KEY } from "../constants"
  * For most items, it's the GraphQL layer, but for state, it's the cache
  *
  * @param {
- * 	options: object - the options object passed into the sync - this has te cache, models, and whether we are in preview mode
+ * 	options: object - the options object passed into the sync - this has the cache, models, and whether we are in preview mode
  * 	itemType: string - the type of item being synced (item, page, etc)
  * 	languageCode: string - the locale code of this item
  * 	itemID: string - the ID (from Agility ) of this item
@@ -39,7 +39,6 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 		case "item": {
 
 			const properties = {
-				preview,
 				locale: languageCode,
 				state: item.properties.state,
 				modified: item.properties.modified,
@@ -145,7 +144,6 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 				id,
 				referenceName: itemID,
 				locale: languageCode,
-				preview,
 				nodes: item
 			})
 			return
@@ -154,7 +152,6 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 				id,
 				referenceName: itemID,
 				locale: languageCode,
-				preview,
 				nodes: item
 			})
 			return
@@ -167,7 +164,6 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 				pageId: item.pageID,
 				versionId: item.properties.versionId.toString(),
 				properties: {
-					preview,
 					locale: languageCode,
 					...item.properties
 				},

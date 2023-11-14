@@ -2,6 +2,7 @@ import agilitySync from "@agility/content-sync"
 let syncInterfaceNetlify = require("./agility-sync-interface.cjs");
 
 import { outputMessage } from "../util/log";
+import { config } from "chai";
 
 interface IAgilitySyncConfig {
 	configOptions: Record<string, any>
@@ -12,15 +13,16 @@ interface IAgilitySyncConfig {
 
 export const syncAgilityContent = async ({ configOptions, cache, models }: IAgilitySyncConfig) => {
 
-	const fetchSyncClient = agilitySync.getSyncClient({
+	const syncClient = agilitySync.getSyncClient({
 		guid: configOptions.guid,
-		apiKey: configOptions.fetchAPIKey,
-		isPreview: false,
+		apiKey: configOptions.apiKey,
+		isPreview: configOptions.isPreview,
 		debug: false,
 		channels: configOptions.sitemaps.split(","),
 		languages: configOptions.locales.split(","),
+		logLevel: configOptions.logLevel,
 		store: {
-			//use gatsby sync interface
+			//use netlify sync interface
 			interface: syncInterfaceNetlify,
 			options: {
 				models,
@@ -31,34 +33,12 @@ export const syncAgilityContent = async ({ configOptions, cache, models }: IAgil
 		},
 	});
 
-	outputMessage("Syncing fetch...")
-	await fetchSyncClient.runSync()
+	const modeStr = configOptions.isPreview ? "preview" : "live"
 
-	const previewSyncClient = agilitySync.getSyncClient({
-		guid: configOptions.guid,
-		apiKey: configOptions.previewAPIKey,
-		isPreview: true,
-		debug: false,
-		channels: configOptions.sitemaps.split(","),
-		languages: configOptions.locales.split(","),
-		store: {
-			//use gatsby sync interface
-			interface: syncInterfaceNetlify,
-			options: {
-				models,
-				cache,
-				preview: true
+	outputMessage(`Syncing Agility Content for ${modeStr}...`)
 
-			},
-		},
-	});
+	await syncClient.runSync()
 
-	//sync the content for preview and fetch
-	outputMessage("Syncing preview...")
-	await previewSyncClient.runSync()
-
-
-
-	outputMessage("Syncing complete.")
+	outputMessage(`Agility Content Syncing for ${modeStr} complete.`)
 
 }

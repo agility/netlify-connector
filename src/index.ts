@@ -23,10 +23,18 @@ const connector = integration.addConnector({
 	typePrefix: "Agility",
 	localDevOptions: {
 		guid: "2b17d772-d",
-		fetchAPIKey: "defaultlive.ea30c52c8d2af8989ed15578997fac51b7ede4eb4f1878ab6c76867e945541d7",
-		previewAPIKey: "defaultpreview.ab58cfd7fc5acbc7af2b3277feee018c5501275b2f6e48120e7c6ec3690dc76c",
+
+		//LIVE
+		apiKey: "defaultlive.ea30c52c8d2af8989ed15578997fac51b7ede4eb4f1878ab6c76867e945541d7",
+
+		//PREVIEW
+		/*
+		apiKey: "defaultpreview.ab58cfd7fc5acbc7af2b3277feee018c5501275b2f6e48120e7c6ec3690dc76c",
+		isPreview: true,
+		*/
 		locales: "en-us",
-		sitemaps: "website"
+		sitemaps: "website",
+		logLevel: "debug" //debug, info, warn, error, none
 	},
 });
 
@@ -41,15 +49,15 @@ connector.defineOptions(({ zod }) => {
 			helpText: "The guid from your Agility instance.",
 			secret: false,
 		}),
-		fetchAPIKey: zod.string().meta({
-			label: "Fetch API token",
-			helpText: "The fetch API token from your Agility instance",
+		apiKey: zod.string().meta({
+			label: "The Agility API token",
+			helpText: "The fetch or preview API token from your Agility instance",
 			secret: true,
 		}),
-		previewAPIKey: zod.string().meta({
-			label: "Preview API token",
-			helpText: "The preview API token from your Agility instance",
-			secret: true,
+		isPreview: zod.boolean().optional().default(false).meta({
+			label: "Preview Mode?",
+			helpText: "Determines if you are viewing preview content.  Match with the preview API key.",
+			secret: false,
 		}),
 		locales: zod.string().meta({
 			label: "Locales",
@@ -60,7 +68,13 @@ connector.defineOptions(({ zod }) => {
 			label: "Sitemaps",
 			helpText: "Comma separated list of sitemap reference names your Agility instance that you wish to include.",
 			secret: false,
-		})
+		}),
+		logLevel: zod.string().optional().default("warning").meta({
+			label: "Log Level",
+			helpText: "The log level for this connector (debug, info, warn, error, none).",
+			secret: false
+		}),
+
 	});
 });
 
@@ -70,7 +84,7 @@ connector.defineOptions(({ zod }) => {
 connector.model(async ({ define, cache }, configOptions) => {
 
 	//get the agility clients...
-	const { fetchApiClient } = getAgilityAPIClients({ configOptions })
+	const { apiClient } = getAgilityAPIClients({ configOptions })
 
 	//build the models for layouts (pages, sitemaps, redirects, etc)
 	defineAgilityLayout(define)
@@ -80,7 +94,7 @@ connector.model(async ({ define, cache }, configOptions) => {
 	outputMessage("Adding Content Models...")
 
 	//build the content models
-	await defineAgilityModels({ define, cache, fetchApiClient })
+	await defineAgilityModels({ define, cache, apiClient })
 
 	outputMessage("Content Models added...")
 

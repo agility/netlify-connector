@@ -10,56 +10,36 @@ interface IAgilitySyncConfig {
 }
 
 interface IAgilitySyncClients {
-	fetchSyncClient: any
-	previewSyncClient: any
+	syncClient: any
 }
 
 export const getAgilitySyncClients = ({ configOptions, models, cache }: IAgilitySyncConfig): IAgilitySyncClients => {
 
-	const baseUrl = null //"https://localhost:5001"
-
-	const fetchSyncClient = agilitySync.getSyncClient({
+	const syncClient = agilitySync.getSyncClient({
 		guid: configOptions.guid,
-		apiKey: configOptions.fetchAPIKey,
-		isPreview: false,
+		apiKey: configOptions.apiKey,
+		isPreview: configOptions.isPreview,
+		logLevel: configOptions.logLevel,
 		debug: false,
 		channels: configOptions.sitemaps.split(","),
 		languages: configOptions.locales.split(","),
 		store: {
-			//use gatsby sync interface
 			interface: syncInterfaceNetlify,
 			options: {
-				models,
-				cache,
-				preview: false
-
+				options: {
+					models,
+					cache,
+					preview: configOptions.isPreview
+				},
 			},
 		},
 	});
 
-	const previewSyncClient = agilitySync.getSyncClient({
-		guid: configOptions.guid,
-		apiKey: configOptions.previewAPIKey,
-		isPreview: true,
-		debug: false,
-		channels: configOptions.sitemaps.split(","),
-		languages: configOptions.locales.split(","),
-		store: {
-			//use gatsby sync interface
-			interface: syncInterfaceNetlify,
-			options: {
-				models,
-				cache,
-				preview: true
 
-			},
-		},
-	});
 
 
 	return {
-		fetchSyncClient,
-		previewSyncClient
+		syncClient
 	}
 
 }

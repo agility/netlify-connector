@@ -9,8 +9,20 @@ const engine = contentEngine({
 				resolve: require.resolve("../.ntli/connector/package.json"),
 				options: {
 					guid: "2b17d772-d",
-					fetchAPIKey: "defaultlive.ea30c52c8d2af8989ed15578997fac51b7ede4eb4f1878ab6c76867e945541d7",
-					previewAPIKey: "defaultpreview.ab58cfd7fc5acbc7af2b3277feee018c5501275b2f6e48120e7c6ec3690dc76c",
+					apiKey: "defaultlive.ea30c52c8d2af8989ed15578997fac51b7ede4eb4f1878ab6c76867e945541d7",
+					isPreview: false,
+					//previewAPIKey: "defaultpreview.ab58cfd7fc5acbc7af2b3277feee018c5501275b2f6e48120e7c6ec3690dc76c",
+					locales: "en-us",
+					sitemaps: "website"
+				},
+			},
+			{
+				// the connector must be built before running tests.
+				resolve: require.resolve("../.ntli/connector/package.json"),
+				options: {
+					guid: "2b17d772-d",
+					apiKey: "defaultpreview.ab58cfd7fc5acbc7af2b3277feee018c5501275b2f6e48120e7c6ec3690dc76c",
+					isPreview: true,
 					locales: "en-us",
 					sitemaps: "website"
 				},

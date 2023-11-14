@@ -5,9 +5,6 @@ export const defineAgilityProperties = (define: any) => {
 			locale: {
 				type: "String",
 			},
-			preview: {
-				type: "Boolean",
-			},
 			state: {
 				type: "Int",
 			},

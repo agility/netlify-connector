@@ -15,10 +15,6 @@ export const defineAgilityLayout = (define: any) => {
 			versionId: {
 				type: "Int",
 			},
-			preview: {
-				type: "Boolean",
-				required: true
-			},
 			locale: {
 				type: "String",
 				required: true

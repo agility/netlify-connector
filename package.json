@@ -1,6 +1,6 @@
 {
   "name": "agility-content",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {

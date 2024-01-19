@@ -11,7 +11,7 @@ export const defineAgilityProperties = (define: any) => {
 			modified: {
 				type: "Date",
 			},
-			versionId: {
+			agilityVersionId: {
 				type: "Int",
 			},
 			referenceName: {

@@ -42,7 +42,7 @@ export const defineAgilityModels = async ({ define, cache, apiClient }: Props) =
 				type: "Int",
 				required: true
 			},
-			versionId: {
+			agilityVersionId: {
 				type: "String",
 				required: true
 			},
@@ -75,7 +75,7 @@ export const defineAgilityModels = async ({ define, cache, apiClient }: Props) =
 				type: "Int",
 				required: true
 			},
-			versionId: {
+			agilityVersionId: {
 				type: "String",
 				required: true
 			},
@@ -132,7 +132,7 @@ export const defineAgilityModels = async ({ define, cache, apiClient }: Props) =
 
 		define.nodeModel({
 			name: model.referenceName,
-			cacheFieldName: "versionId",
+			cacheFieldName: "agilityVersionId",
 			fields
 		});
 

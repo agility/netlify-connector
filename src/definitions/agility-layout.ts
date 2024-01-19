@@ -12,7 +12,7 @@ export const defineAgilityLayout = (define: any) => {
 			modified: {
 				type: "Date",
 			},
-			versionId: {
+			agilityVersionId: {
 				type: "Int",
 			},
 			locale: {
@@ -94,7 +94,7 @@ export const defineAgilityLayout = (define: any) => {
 	outputMessage("Adding Layout Model...")
 	define.nodeModel({
 		name: "Layout",
-		cacheFieldName: "versionId",
+		cacheFieldName: "agilityVersionId",
 		fields: {
 			pageId: {
 				type: "Int",
@@ -104,7 +104,7 @@ export const defineAgilityLayout = (define: any) => {
 				type: AgilityLayoutProperties,
 				required: true
 			},
-			versionId: {
+			agilityVersionId: {
 				type: "String",
 				required: true
 			},

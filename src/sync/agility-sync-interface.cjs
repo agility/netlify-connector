@@ -42,7 +42,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 				locale: languageCode,
 				state: item.properties.state,
 				modified: item.properties.modified,
-				versionId: item.properties.versionID,
+				agilityVersionId: item.properties.versionID,
 				referenceName: item.properties.referenceName,
 				definitionName: item.properties.definitionName,
 				itemOrder: item.properties.itemOrder
@@ -58,7 +58,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 				models["Component"].create({
 					id,
 					contentId: item.contentID,
-					versionId: item.properties.versionID,
+					agilityVersionId: item.properties.versionID,
 					properties,
 					content: item.fields
 				})
@@ -126,7 +126,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 				model.create({
 					id,
 					contentId: item.contentID,
-					versionId: item.properties.versionID,
+					agilityVersionId: item.properties.versionID,
 					properties,
 					seo: item.seo || null,
 					...fields
@@ -156,13 +156,13 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
 			})
 			return
 		case "page":
-			item.properties.versionId = item.properties.versionID
+			item.properties.agilityVersionId = item.properties.versionID
 			delete item.properties.versionID
 
 			models["Layout"].create({
 				id,
 				pageId: item.pageID,
-				versionId: item.properties.versionId.toString(),
+				agilityVersionId: item.properties.agilityVersionId.toString(),
 				properties: {
 					locale: languageCode,
 					...item.properties

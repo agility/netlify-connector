@@ -39,7 +39,7 @@ allAgilityPost (filter: {properties: {referenceName: {eq: "posts"}}})
     nodes {
       contentId
       properties {
-        versionId
+        agilityVersionId
         locale
       }
       category {

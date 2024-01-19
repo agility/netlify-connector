@@ -15,3 +15,5 @@ Access-Control-Allow-Methods="*"
 
 [dev]
 autoLaunch = false
+functions = ".ntli/site/netlify/functions"
+publish = ".ntli/site/static"

@@ -1,2 +1,7 @@
 config:
+  name: Agility CMS Content
+  description: Connect your Agility CMS content.
   slug: agility-content
+  scopes:
+    all: true
+  integrationLevel: "team"

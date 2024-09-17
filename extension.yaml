@@ -4,4 +4,3 @@ config:
   slug: agility-content
   scopes:
     all: true
-  integrationLevel: "team"

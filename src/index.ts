@@ -1,4 +1,4 @@
-import { NetlifyIntegration } from "@netlify/sdk";
+import { NetlifyExtension } from "@netlify/sdk";
 import { getAgilityAPIClients } from "./sync/agility-api-clients";
 import { outputMessage } from "./util/log";
 import { defineAgilityLayout } from "./definitions/agility-layout";
@@ -18,8 +18,8 @@ import { defineAgilityRedirection } from "./definitions/agility-redirection";
 */
 
 
-const integration = new NetlifyIntegration();
-const connector = integration.addConnector({
+const extension = new NetlifyExtension();
+const connector = extension.addConnector({
 	typePrefix: "Agility",
 	localDevOptions: {
 		guid: "2b17d772-d",
@@ -128,9 +128,9 @@ connector.event("updateNodes", async ({ models, cache }, configOptions) => {
 
 });
 
-integration.onEnable(async (_, { teamId, siteId, client }) => {
+extension.onEnable(async (_, { teamId, siteId, client }) => {
 	// Connectors are disabled by default, so we need to
-	// enable them when the integration is enabled.
+	// enable them when the extension is enabled.
 
 	teamId && await client.enableConnectors(teamId);
 
@@ -139,5 +139,5 @@ integration.onEnable(async (_, { teamId, siteId, client }) => {
 	};
 });
 
-export { integration };
+export { extension };
 

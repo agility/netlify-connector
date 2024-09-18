@@ -1,22 +1,12 @@
 [build]
-command = "netlify-extension build -a"
+command = "netlify-extension build"
 publish = ".ntli/site/static"
-
-[functions]
-directory = ".ntli/site/netlify/functions"
-node_bundler = "esbuild"
-
-[[headers]]
-for = "/ui/*"
-[headers.values]
-Access-Control-Allow-Origin = "*"
-Access-Control-Allow-Headers = "*"
-Access-Control-Allow-Methods = "*"
 
 [dev]
-autoLaunch = false
-functions = ".ntli/site/netlify/functions"
-publish = ".ntli/site/static"
+command = "netlify-extension dev"
+
+[functions]
+directory = "src/endpoints"
 
 [[plugins]]
 package = "@netlify/netlify-plugin-netlify-extension"

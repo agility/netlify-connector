@@ -59,7 +59,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
           agilityVersionId: item.properties.versionID,
           properties,
           content: item.fields,
-          _createdAt: new Date(),
+          _createdAt: new Date().toISOString(),
           _status: "published",
         });
 
@@ -146,7 +146,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
           agilityVersionId: item.properties.versionID,
           properties,
           seo: item.seo || null,
-          _createdAt: new Date(),
+          _createdAt: new Date().toISOString(),
           _status: "published",
           ...fields,
         });
@@ -162,7 +162,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
         referenceName: itemID,
         locale: languageCode,
         nodes: item,
-        _createdAt: new Date(),
+        _createdAt: new Date().toISOString(),
         _status: "published",
       });
       return;
@@ -172,7 +172,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
         referenceName: itemID,
         locale: languageCode,
         nodes: item,
-        _createdAt: new Date(),
+        _createdAt: new Date().toISOString(),
         _status: "published",
       });
       return;
@@ -206,7 +206,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
         excludeFromOutputCache: item.excludeFromOutputCache,
         zones: item.zones,
         dynamic: item.dynamic,
-        _createdAt: new Date(),
+        _createdAt: new Date().toISOString(),
         _status: "published",
       });
       return;
@@ -218,7 +218,7 @@ const saveItem = async ({ options, item, itemType, languageCode, itemID }) => {
       models["Redirections"].insert({
         id,
         items: item.items,
-        _createdAt: new Date(),
+        _createdAt: new Date().toISOString(),
         _status: "published",
       });
       return;

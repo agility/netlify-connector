@@ -1,5 +1,5 @@
 import axios from "axios"
-import https from "https"
+import * as https from "https"
 import { MODELS_CACHE_KEY } from "../constants"
 import { ModelsResponse } from "../types/ModelsResponse"
 import { outputError, outputMessage } from "../util/log"

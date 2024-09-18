@@ -66,6 +66,7 @@ describe("connector tests", () => {
 			{}
 		);
 
+		console.log({errors})
 		assert.isUndefined(errors, "There should be no errors in the query");
 
 		//@ts-ignore

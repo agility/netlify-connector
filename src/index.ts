@@ -128,16 +128,5 @@ connector.event("updateNodes", async ({ models, cache }, configOptions) => {
 
 });
 
-extension.onEnable(async (_, { teamId, siteId, client }) => {
-	// Connectors are disabled by default, so we need to
-	// enable them when the extension is enabled.
-
-	teamId && await client.enableConnectors(teamId);
-
-	return {
-		statusCode: 200,
-	};
-});
-
 export { extension };
 

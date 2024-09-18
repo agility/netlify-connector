@@ -92,7 +92,7 @@ export const defineAgilityLayout = (define: any) => {
 
 	//#endregion END ExtraTypes
 	outputMessage("Adding Layout Model...")
-	define.nodeModel({
+	define.document({
 		name: "Layout",
 		cacheFieldName: "agilityVersionId",
 		fields: {

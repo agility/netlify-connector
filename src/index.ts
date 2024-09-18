@@ -36,6 +36,11 @@ const connector = extension.addConnector({
 		sitemaps: "website",
 		logLevel: "debug" //debug, info, warn, error, none
 	},
+	supports: {
+		connect: true,
+		visualEditor: false,
+	},
+	autoFormatGraphQLTypesAndFields: true,
 });
 
 /**

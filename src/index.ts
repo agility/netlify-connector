@@ -41,47 +41,44 @@ const connector = extension.addConnector({
 		visualEditor: false,
 	},
 	autoFormatGraphQLTypesAndFields: true,
+	defineOptions: (({ zod }) => {
+
+		return zod.object({
+			guid: zod.string().meta({
+				label: "Instance GUID",
+				helpText: "The guid from your Agility instance.",
+				secret: false,
+			}),
+			apiKey: zod.string().meta({
+				label: "The Agility API token",
+				helpText: "The fetch or preview API token from your Agility instance",
+				secret: true,
+			}),
+			isPreview: zod.boolean().optional().default(false).meta({
+				label: "Preview Mode?",
+				helpText: "Determines if you are viewing preview content.  Match with the preview API key.",
+				secret: false,
+			}),
+			locales: zod.string().meta({
+				label: "Locales",
+				helpText: "Comma separated list of locale codes from your Agility instance (e.g. en-us,fr-ca)",
+				secret: false,
+			}),
+			sitemaps: zod.string().meta({
+				label: "Sitemaps",
+				helpText: "Comma separated list of sitemap reference names your Agility instance that you wish to include.",
+				secret: false,
+			}),
+			logLevel: zod.string().optional().default("warning").meta({
+				label: "Log Level",
+				helpText: "The log level for this connector (debug, info, warn, error, none).",
+				secret: false
+			}),
+	
+		});
+	})
 });
 
-/**
- * Defines the options / config values for this connector
- */
-connector.defineOptions(({ zod }) => {
-
-	return zod.object({
-		guid: zod.string().meta({
-			label: "Instance GUID",
-			helpText: "The guid from your Agility instance.",
-			secret: false,
-		}),
-		apiKey: zod.string().meta({
-			label: "The Agility API token",
-			helpText: "The fetch or preview API token from your Agility instance",
-			secret: true,
-		}),
-		isPreview: zod.boolean().optional().default(false).meta({
-			label: "Preview Mode?",
-			helpText: "Determines if you are viewing preview content.  Match with the preview API key.",
-			secret: false,
-		}),
-		locales: zod.string().meta({
-			label: "Locales",
-			helpText: "Comma separated list of locale codes from your Agility instance (e.g. en-us,fr-ca)",
-			secret: false,
-		}),
-		sitemaps: zod.string().meta({
-			label: "Sitemaps",
-			helpText: "Comma separated list of sitemap reference names your Agility instance that you wish to include.",
-			secret: false,
-		}),
-		logLevel: zod.string().optional().default("warning").meta({
-			label: "Log Level",
-			helpText: "The log level for this connector (debug, info, warn, error, none).",
-			secret: false
-		}),
-
-	});
-});
 
 /**
  * Defines the models for the connector
@@ -105,33 +102,30 @@ connector.model(async ({ define, cache }, configOptions) => {
 
 });
 
-/**
- * Create the nodes for the first time...
- * Docs here: https://sdk.netlify.com/connectors/develop/
- */
-connector.event("createAllNodes", async ({ models, cache }, configOptions) => {
 
-	outputMessage("Pulling content for initial sync..")
-	await syncAgilityContent({ configOptions, models, cache })
-	outputMessage("Initial content pull complete.")
+connector.sync(async ({isInitialSync, models, cache, options}) => {
+	if (isInitialSync) {
+		/**
+		 * Create the nodes for the first time...
+		 * Docs here: https://sdk.netlify.com/connectors/develop/
+		 */
+		outputMessage("Pulling content for initial sync..")
+		
+		await syncAgilityContent({ configOptions: options, models, cache })
 
+		outputMessage("Initial content pull complete.")
+	} else {
+		/**
+		 * Content Delta! Do a sync pull down the delta and update the nodes
+		 * Netlify Docs here: https://sdk.netlify.com/connectors/develop/
+		 */
+		outputMessage("Pulling content for delta sync..")
 
+		await syncAgilityContent({ configOptions: options, models, cache })
 
-});
-
-/**
- * Content Delta! Do a sync pull down the delta and update the nodes
- * Netlify Docs here: https://sdk.netlify.com/connectors/develop/
- */
-connector.event("updateNodes", async ({ models, cache }, configOptions) => {
-
-	outputMessage("Pulling content for delta sync..")
-
-	await syncAgilityContent({ configOptions, models, cache })
-
-	outputMessage("Delta content pull complete.")
-
-});
+		outputMessage("Delta content pull complete.")
+	}
+})
 
 export { extension };
 

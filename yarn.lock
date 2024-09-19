@@ -2130,31 +2130,32 @@
     wretch "^2.7.0"
     zod "^3.22.4"
 
-"@netlify/sdk--ui-core@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@netlify/sdk--ui-core/-/sdk--ui-core-1.1.0.tgz#d3e3c82739a5348b6f4fc74bda5dea00d674e902"
-  integrity sha512-qR/bprdLc8nJFtbtg3286tf2/r0HLHhcHln1jj3M1X6ieuy7VHFEwpzWJsEQ973tMM1i+UNxCqHhQADt1A8Gpw==
+"@netlify/sdk--ui-core@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@netlify/sdk--ui-core/-/sdk--ui-core-1.2.0.tgz#98209072ccb59f34215610e7c6225c8eff6a52b0"
+  integrity sha512-mKmqRVi4q09YgGJ2TxBtwjRAW+Z202YwOiuJD+0eEn6SmWaIXTW2tfHqhm2rnfkRtqpol1ciFQsGUmlDFkkfJQ==
   dependencies:
     event-iterator "^2.0.0"
     iter-tools-es "^7.5.3"
     zod "^3.22.4"
 
-"@netlify/sdk--ui-functions@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@netlify/sdk--ui-functions/-/sdk--ui-functions-1.0.4.tgz#3456e59c52aa897823701e6b221c9b453b63215e"
-  integrity sha512-9W1ohNaI+4Kcm/rX93y16Vlq+4nq+T6bUnAAfo76Uw4vTOkdwiPcgBLmDaIlxEC5U82VQ2bXq5ngdBfxLCEalw==
+"@netlify/sdk--ui-functions@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@netlify/sdk--ui-functions/-/sdk--ui-functions-1.1.0.tgz#85a13b679878775208a66fefa09e11fb56ca547b"
+  integrity sha512-m78afViKoDOsiLT9VFRyJH91xOnZFYiSayPpUfe0gD8te9l7cDNX7ic4oedlLJg6GEzx33R+qvJQw0XY6v7xHg==
   dependencies:
     "@netlify/functions" "^2.8.1"
     "@netlify/sdk--extension-api-client" "2.2.0"
+    zod "^3.23.8"
 
-"@netlify/sdk--ui-react@1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@netlify/sdk--ui-react/-/sdk--ui-react-1.2.1.tgz#cf36761b5bc18e1c8cdd4e0f4e0fc1a9b37bbc4e"
-  integrity sha512-K+zmRDkYDGOByYbSwplK2sAVFSwSFO4/UAyctMa61Wdur32ZmNgiySER8BpsuIOY0h4qK6szaBKPEM1h4xiYVA==
+"@netlify/sdk--ui-react@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@netlify/sdk--ui-react/-/sdk--ui-react-1.4.0.tgz#a48e7f1aaad19872937fd26bc49509c3d34c1851"
+  integrity sha512-RZ1GeLWCbEYdfOt4hZ7d8PuW1MuyowTA94yhxxjosXkhZtTlSzjRPXk+aIgKsIpiv6nr1ktijUxgQg9o0NyS+g==
   dependencies:
     "@hookform/resolvers" "^3.6.0"
     "@netlify/netlify-design-tokens" "^6.0.0"
-    "@netlify/sdk--ui-core" "1.1.0"
+    "@netlify/sdk--ui-core" "1.2.0"
     "@netlify/tailwind-config" "^2.0.0"
     "@netlify/ui" "0.0.20"
     "@react-hook/resize-observer" "^2.0.1"
@@ -2205,10 +2206,10 @@
     zod-to-json-schema "^3.21.4"
     zod-validation-error "^2.0.0"
 
-"@netlify/sdk@^2.3.3":
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/@netlify/sdk/-/sdk-2.3.3.tgz#0282dde881aed8fcd1b15aa3adf97dcdd500e112"
-  integrity sha512-82gw8k12xDbR+JINMXa3+K9JEa/Dym+oS7dVnXO/eesOzvlsTiNEx0YDBT/1DDZCerAX+96pDdpcrqZMpBXNDA==
+"@netlify/sdk@^2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@netlify/sdk/-/sdk-2.4.1.tgz#92bb3834d5585d3121859387bca112cf840b2fae"
+  integrity sha512-aLD0E7A+QuLBSJFAMAc4WB0DZS+MfCknrlJh0SPKXPibkF7LqeH0wq4LWB/59eEfJQIkyZXT+NLgZUuvB3188A==
   dependencies:
     "@commander-js/extra-typings" "^12.1.0"
     "@graphql-tools/stitch" "^9.0.3"
@@ -2218,9 +2219,9 @@
     "@netlify/functions" "^2.8.1"
     "@netlify/integrations" "^0.6.0"
     "@netlify/sdk--extension-api-client" "2.2.0"
-    "@netlify/sdk--ui-core" "1.1.0"
-    "@netlify/sdk--ui-functions" "1.0.4"
-    "@netlify/sdk--ui-react" "1.2.1"
+    "@netlify/sdk--ui-core" "1.2.0"
+    "@netlify/sdk--ui-functions" "1.1.0"
+    "@netlify/sdk--ui-react" "1.4.0"
     "@sindresorhus/slugify" "^2.2.1"
     "@stackbit/dev" "^1.0.27"
     "@types/configstore" "^6.0.2"

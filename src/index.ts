@@ -6,7 +6,6 @@ import { defineAgilityModels } from "./definitions/agility-models";
 import { defineAgilitySitemaps } from "./definitions/agility-sitemaps";
 import { syncAgilityContent } from "./sync/agility-sync";
 import { defineAgilityRedirection } from "./definitions/agility-redirection";
-import { configurationSchema } from "./schema/connect-config-schema";
 /*
 	 ___         _ ___ __           _   __     __  ___ ____         ______                            __
 	/   | ____ _(_) (_) /___  __   / | / /__  / /_/ (_) __/_  __   / ____/___  ____  ____  ___  _____/ /_

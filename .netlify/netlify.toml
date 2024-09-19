@@ -1,0 +1,38 @@
+functionsDirectory = "/Users/sarahetter/random-repos/netlify-connector/src/endpoints"
+functionsDirectoryOrigin = "config"
+headers = []
+redirects = []
+
+[dev]
+command = "netlify-extension dev"
+
+[functions]
+
+[functions."*"]
+
+[[plugins]]
+origin = "config"
+package = "@netlify/netlify-plugin-netlify-extension"
+
+[plugins.inputs]
+
+[build]
+publish = "/Users/sarahetter/random-repos/netlify-connector/.ntli/site/static"
+publishOrigin = "config"
+commandOrigin = "inline"
+command = "vite build"
+functions = "/Users/sarahetter/random-repos/netlify-connector/src/endpoints"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]

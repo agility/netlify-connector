@@ -95,7 +95,6 @@ export const ConnectConfiguration = () => {
           />
           <Checkbox
             name="isPreview"
-            required={false}
             label="Preview Mode?"
             helpText="Determines if you are viewing preview content.  Match with the preview API key."
           />
@@ -113,7 +112,7 @@ export const ConnectConfiguration = () => {
           />
           <FormField
             name="logLevel"
-            type="number"
+            type="text"
             label="Log Level (optional)"
             helpText="The log level for this connector (debug, info, warn, error, none)."
           />

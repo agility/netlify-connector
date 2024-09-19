@@ -6,7 +6,7 @@ import { defineAgilityModels } from "./definitions/agility-models";
 import { defineAgilitySitemaps } from "./definitions/agility-sitemaps";
 import { syncAgilityContent } from "./sync/agility-sync";
 import { defineAgilityRedirection } from "./definitions/agility-redirection";
-
+import { configurationSchema } from "./schema/connect-config-schema";
 /*
 	 ___         _ ___ __           _   __     __  ___ ____         ______                            __
 	/   | ____ _(_) (_) /___  __   / | / /__  / /_/ (_) __/_  __   / ____/___  ____  ____  ___  _____/ /_
@@ -42,39 +42,13 @@ const connector = extension.addConnector({
 	},
 	autoFormatGraphQLTypesAndFields: true,
 	defineOptions: (({ zod }) => {
-
 		return zod.object({
-			guid: zod.string().meta({
-				label: "Instance GUID",
-				helpText: "The guid from your Agility instance.",
-				secret: false,
-			}),
-			apiKey: zod.string().meta({
-				label: "The Agility API token",
-				helpText: "The fetch or preview API token from your Agility instance",
-				secret: true,
-			}),
-			isPreview: zod.boolean().optional().default(false).meta({
-				label: "Preview Mode?",
-				helpText: "Determines if you are viewing preview content.  Match with the preview API key.",
-				secret: false,
-			}),
-			locales: zod.string().meta({
-				label: "Locales",
-				helpText: "Comma separated list of locale codes from your Agility instance (e.g. en-us,fr-ca)",
-				secret: false,
-			}),
-			sitemaps: zod.string().meta({
-				label: "Sitemaps",
-				helpText: "Comma separated list of sitemap reference names your Agility instance that you wish to include.",
-				secret: false,
-			}),
-			logLevel: zod.string().optional().default("warning").meta({
-				label: "Log Level",
-				helpText: "The log level for this connector (debug, info, warn, error, none).",
-				secret: false
-			}),
-	
+			guid: zod.string(),
+			apiKey: zod.string(),
+			isPreview: zod.boolean().optional().default(false),
+			locales: zod.string(),
+			sitemaps: zod.string(),
+			logLevel: zod.string().optional().default("warning"),
 		});
 	})
 });

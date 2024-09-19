@@ -4,3 +4,6 @@ config:
   slug: agility-content
   scopes:
     all: true
+  ui:
+    surfaces:
+      - extension-connect-configuration

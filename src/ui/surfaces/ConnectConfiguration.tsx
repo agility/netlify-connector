@@ -96,11 +96,13 @@ export const ConnectConfiguration = () => {
             helpText="The fetch or preview API token from your Agility instance"
             required
           />
-          <Checkbox
-            name="isPreview"
-            label="Preview Mode?"
-            helpText="Determines if you are viewing preview content.  Match with the preview API key."
-          />
+          <div className="tw-mt-6">
+            <Checkbox
+              name="isPreview"
+              label="Preview Mode?"
+              helpText="Determines if you are viewing preview content.  Match with the preview API key."
+            />
+          </div>
           <FormField
             name="locales"
             type="text"

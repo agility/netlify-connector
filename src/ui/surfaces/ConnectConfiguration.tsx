@@ -76,22 +76,25 @@ export const ConnectConfiguration = () => {
           schema={connectSettingsSchema}
           onSubmit={onSubmit}
         >
-          <FormField label="Name" name="name" />
+          <FormField label="Name" name="name" required />
           <FormField
             label="Prefix"
             name="prefix"
             helpText="The prefix to use for types synced from this data source. It must start with an uppercase letter and can only consist of alphanumeric characters and underscores. For example, Product becomes {Prefix}Product."
+            required
           />
           <FormField
             name="guid"
             type="text"
             label="Instance GUID"
             helpText="The guid from your Agility instance."
+            required
           />
           <FormFieldSecret
             name="apiKey"
             label="The Agility API token"
             helpText="The fetch or preview API token from your Agility instance"
+            required
           />
           <Checkbox
             name="isPreview"
@@ -103,12 +106,14 @@ export const ConnectConfiguration = () => {
             type="text"
             label="Locales"
             helpText="Comma separated list of locale codes from your Agility instance (e.g. en-us,fr-ca)"
+            required
           />
           <FormField
             name="sitemaps"
             type="text"
             label="Sitemaps"
             helpText="Comma separated list of sitemap reference names your Agility instance that you wish to include."
+            required
           />
           <FormField
             name="logLevel"

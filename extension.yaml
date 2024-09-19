@@ -1,8 +1,7 @@
 config:
   name: Agility CMS Content
   description: Connect your Agility CMS content.
-  # slug: agility-content
-  slug: ty6ox-4n-agility
+  slug: agility-content
   scopes:
     all: true
   ui:

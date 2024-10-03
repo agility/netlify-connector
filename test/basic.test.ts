@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { contentEngine } from "content-engine";
+import { contentEngine } from "@netlify/content-engine";
 
 const engine = contentEngine({
 	engineConfig: {

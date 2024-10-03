@@ -3,7 +3,7 @@ export const camelize = (str: string) => {
 
 	let retStr = str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
 		return index === 0 ? word.toLowerCase() : word.toUpperCase();
-	}).replace(/\s+/g, '').replaceAll("_", "");
+	}).replace(/\s+/g, '').replace(/_/g, "");
 
 	if (retStr.endsWith("ID")) {
 		retStr = `${retStr.slice(0, -2)}Id`

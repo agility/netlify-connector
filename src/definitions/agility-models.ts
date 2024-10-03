@@ -34,7 +34,7 @@ export const defineAgilityModels = async ({ define, cache, apiClient }: Props) =
 	defineLinkedList(define)
 
 	//define a generic model for Components
-	define.nodeModel({
+	define.document({
 		name: "Component",
 		fields: {
 			//every type has an Agility properties type and a special cache field based on the version ID and the typename
@@ -130,7 +130,7 @@ export const defineAgilityModels = async ({ define, cache, apiClient }: Props) =
 			}
 		});
 
-		define.nodeModel({
+		define.document({
 			name: model.referenceName,
 			cacheFieldName: "agilityVersionId",
 			fields

@@ -4,4 +4,6 @@ config:
   slug: agility-content
   scopes:
     all: true
-  integrationLevel: "team"
+  ui:
+    surfaces:
+      - extension-connect-configuration

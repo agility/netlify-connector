@@ -4,7 +4,7 @@ export const defineAgilityRedirection = (define: any) => {
 
 	outputMessage("Adding Redirection Model...")
 
-	define.nodeModel({
+	define.document({
 		name: "Redirections",
 		fields: {
 			items: {

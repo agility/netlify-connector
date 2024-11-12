@@ -15,7 +15,7 @@
     "@agility/content-sync": "^1.1.7",
     "@netlify/functions": "^2.8.1",
     "@netlify/netlify-plugin-netlify-extension": "^1.0.1",
-    "@netlify/sdk": "^2.8.3",
+    "@netlify/sdk": "^2.9.0",
     "@tanstack/react-query": "^5.56.2",
     "@trpc/client": "11.0.0-rc.477",
     "@trpc/react-query": "11.0.0-rc.477",

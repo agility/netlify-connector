@@ -2169,10 +2169,10 @@
     "@netlify/sdk--extension-api-client" "2.3.0"
     zod "^3.23.8"
 
-"@netlify/sdk--ui-react@1.9.1":
-  version "1.9.1"
-  resolved "https://registry.npmjs.org/@netlify/sdk--ui-react/-/sdk--ui-react-1.9.1.tgz#889b6893576770c688d41ed2de2d25cd6bbb5ac4"
-  integrity sha512-3gmdCSCDLsUPy0+K3iqvpFvpxJ53mh+rhRjKMIDtCvzf6yzz9DXhn/0BfRFLFFASc11i2+Kcd1T63An8ndbuVw==
+"@netlify/sdk--ui-react@1.10.0":
+  version "1.10.0"
+  resolved "https://registry.npmjs.org/@netlify/sdk--ui-react/-/sdk--ui-react-1.10.0.tgz#603e23b52923a170cdf5dee82de904cb0117ac61"
+  integrity sha512-luc7tmLi0+q9L3IYV4iOOM9Z9Bhnrgj2cgKD5WkvLxrVOQ+ttKRd07vgR4hX/2h9zCG/hDa447uzsDA9qfztgg==
   dependencies:
     "@fullstory/browser" "^2.0.5"
     "@hookform/resolvers" "^3.9.0"
@@ -2230,10 +2230,10 @@
     zod-to-json-schema "^3.21.4"
     zod-validation-error "^2.0.0"
 
-"@netlify/sdk@^2.8.3":
-  version "2.8.3"
-  resolved "https://registry.npmjs.org/@netlify/sdk/-/sdk-2.8.3.tgz#29419574e31ae2cae19c67b471e7aca44d9642b8"
-  integrity sha512-8DoMxTj+9slp/HijrVb+vmZfWQhe1CiL5u1X2nUNBbA3+a4J8OPYCcm3IjvT3+3nTaF8GySjh+GaFVKbxO2tPQ==
+"@netlify/sdk@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.npmjs.org/@netlify/sdk/-/sdk-2.9.0.tgz#59ddaa8f4d3c112829381bffd449c0307fb44a42"
+  integrity sha512-iF3jYplVBE7mG26Z7bvXUiC/rbWPvNDjT3LIU4PxHcG7zK3aGjA9qa96fkdXMiiDfu/zlb/kxniO6GvSY83/Rg==
   dependencies:
     "@commander-js/extra-typings" "^12.1.0"
     "@graphql-tools/stitch" "^9.0.3"
@@ -2245,7 +2245,7 @@
     "@netlify/sdk--extension-api-client" "2.3.0"
     "@netlify/sdk--ui-core" "1.4.1"
     "@netlify/sdk--ui-functions" "1.2.1"
-    "@netlify/sdk--ui-react" "1.9.1"
+    "@netlify/sdk--ui-react" "1.10.0"
     "@sindresorhus/slugify" "^2.2.1"
     "@stackbit/dev" "^1.0.27"
     "@types/configstore" "^6.0.2"
